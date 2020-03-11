@@ -13,6 +13,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('chat/', include('chat.urls', namespace='chat')),
     path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-        #re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
