@@ -10,6 +10,7 @@ from rest_framework.generics import (
 )
 from chat.models import Chat, Contact
 from .serializers import ChatSerializer
+from .serializers import CustomTokenObtainPairSerializer
 
 User = get_user_model()
 
@@ -26,7 +27,9 @@ def get_user_contact(username):
 def get_current_chat(chatId):
     return get_object_or_404(Chat, id=chatId)
 
-
+class CustomTokenObtainPairView(TokenObtainPairView):
+    # Replace the serializer with your custom
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class ChatListView(ListAPIView):
