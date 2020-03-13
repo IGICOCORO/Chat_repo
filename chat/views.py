@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, get_object_or_404
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import permissions
 from rest_framework.generics import (
     ListAPIView,
