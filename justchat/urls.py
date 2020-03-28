@@ -10,7 +10,7 @@ schema_view = get_swagger_view(title='Chat API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/doc/', schema_view),
+    path('doc/', schema_view),
     path('api-auth/', include('rest_framework.urls')),
     path('chat/', include('chat.urls', namespace='chat')),
     path('rest-auth/', include('rest_auth.urls')),
