@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'rest_framework_swagger',
     'rest_framework_simplejwt',
+     'corsheaders',
 ]
 
 
@@ -55,6 +56,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,6 +67,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'justchat.urls'
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+       'http://localhost:3000',
+)
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
