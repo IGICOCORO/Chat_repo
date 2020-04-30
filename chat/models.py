@@ -7,7 +7,7 @@ User = get_user_model()
 class Contact(models.Model):
     user = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
     friends = models.ManyToManyField('self', blank=True)
-    picture = models.FileField(blank=False)
+    picture = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username
