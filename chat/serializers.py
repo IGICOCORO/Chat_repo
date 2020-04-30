@@ -14,12 +14,12 @@ class ChatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = ('id', 'messages', 'participants')
-        read_only = ('id')
+        fields = ("id", "messages", "participants")
+        read_only = "id"
 
     def create(self, validated_data):
         print(validated_data)
-        participants = validated_data.pop('participants')
+        participants = validated_data.pop("participants")
         chat = Chat()
         chat.save()
         for username in participants:
@@ -28,12 +28,13 @@ class ChatSerializer(serializers.ModelSerializer):
         chat.save()
         return chat
 
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # The default result (access/refresh tokens)
         data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
         # Custom data you want to include
-        data.update({'user': self.user.username})
-        data.update({'id': self.user.id})
+        data.update({"user": self.user.username})
+        data.update({"id": self.user.id})
         # and everything else you want to send in the response
         return data
