@@ -59,6 +59,17 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        content = {
+            'command': 'new_message',
+            'message': self.message_to_json({
+                'id': 0,
+                'author': self.scope["user"],
+                'content': None,
+                'timestamp': str(message.timestamp)
+            })
+        }
+        # return self.send_chat_message(content)
+        self.send_chat_message(content, "CONNECTION")
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -70,12 +81,13 @@ class ChatConsumer(WebsocketConsumer):
         data = json.loads(text_data)
         self.commands[data['command']](self, data)
 
-    def send_chat_message(self, message):
+    def send_chat_message(self, message, flag=None):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'flag':flag
             }
         )
 
