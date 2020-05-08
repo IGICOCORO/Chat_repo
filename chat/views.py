@@ -1,72 +1,102 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, get_object_or_404
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import permissions
-from rest_framework.generics import (
-    ListAPIView,
-    RetrieveAPIView,
-    CreateAPIView,
-    DestroyAPIView,
-    UpdateAPIView
-)
-from chat.models import Chat, Contact
-from .serializers import ChatSerializer
-from .serializers import CustomTokenObtainPairSerializer
+from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+from django.contrib.auth.models import User
 
-User = get_user_model()
+from .models import *
+from .serializers import *
+from .forms import *
 
-def get_last_10_messages(chatId):
-        chat = get_object_or_404(Chat, id=chatId)
-        return chat.messages.order_by('-timestamp').all()[:10]
+class Home(View):
+    template_name = "index.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            contacts = Contact.objects.all()
+            return render(request, self.template_name, locals())
+        else:
+            return redirect("login")
 
-def get_user_contact(username):
-        user = get_object_or_404(User, username=username)
-        return get_object_or_404(Contact, user=user)
-
-
-def get_current_chat(chatId):
-    return get_object_or_404(Chat, id=chatId)
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    # Replace the serializer with your custom
-    serializer_class = CustomTokenObtainPairSerializer
+def disconnect(request):
+    show_hidden = "hidden"
+    logout(request)
+    return redirect("login")
 
 
-class ChatListView(ListAPIView):
-    serializer_class = ChatSerializer
-    permission_classes = (permissions.AllowAny, )
+class Connexion(View):
+    template_name = "login.html"
+    next_p = "home"
 
-    def get_queryset(self):
-        queryset = Chat.objects.all()
-        username = self.request.query_params.get('username', None)
-        if username is not None:
-            contact = get_user_contact(username)
-            queryset = contact.chats.all()
-        return queryset
+    def get(self, request, *args, **kwargs):
+        form = ConnexionForm()
+        try:
+            self.next_p = request.GET["next"]
+        except:
+            print
+        return render(request, self.template_name, locals())
 
+    def post(self, request, *args, **kwargs):
+        form = ConnexionForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:  # Si l'objet renvoyé n'est pas None
+                login(request, user)
+                messages.success(request, "You're now connected!")
+                return redirect(self.next_p)
+            else:
+                messages.error(request, "logins incorrect!")
+        return render(request, self.template_name, locals())
 
-class ChatDetailView(RetrieveAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
-    permission_classes = (permissions.AllowAny, )
+class Chat(View):
+    template_name = 'chat.html'
+    next_p = "home"
 
+    def get(self, request, *args, **kwargs):
+        form = RegisterForm()
+        return render(request, self.template_name, locals())
 
-class ChatCreateView(CreateAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+    def post(self, request, *args, **kwargs):
+        form = RegisterForm(request.POST, request.FILES)
+        return render(request, self.template_name, locals())
 
+class Register(View):
+    template_name = 'register.html'
+    next_p = "home"
 
-class ChatUpdateView(UpdateAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+    def get(self, request, *args, **kwargs):
+        form = RegisterForm()
+        try:
+            self.next_p = request.GET["next"]
+        except:
+            print
+        return render(request, self.template_name, locals())
 
+    def post(self, request, *args, **kwargs):
+        form = RegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                username = form.cleaned_data['username']
+                firstname = form.cleaned_data['firstname']
+                lastname = form.cleaned_data['lastname']
+                password = form.cleaned_data['password']
+                picture = form.cleaned_data['picture']
+                user = User.objects.create_user(
+                    username=username,
+                    password=password)
+                user.first_name, user.last_name = firstname, lastname
+                user.save()
+                Contact(user=user, picture=picture).save()
+                messages.success(request, "Hello "+username+", youn are registered successfully!")
+                if user:
+                    login(request, user)
+                    return redirect("home")
+            except Exception as e:
+                print(str(e))
+                messages.error(request, str(e))
+        return render(request, self.template_name, locals())
 
-class ChatDeleteView(DestroyAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
-    permission_classes = (permissions.IsAuthenticated, )
 
 

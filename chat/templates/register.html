@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Page Title - SB Admin</title>
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet" />
+  </head>
+  <body style="background-color:cadetblue">
+    <div id="layoutAuthentication">
+      <div id="layoutAuthentication_content">
+        <main>
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-lg-7">
+                <div class="card shadow border-0 rounded-lg mt-5">
+                  <div class="card-header"><h3 class="text-center font-weight-light my-2">Create Account</h3></div>
+                  <div class="card-body">
+                    <form action="." method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <input type="submit" name="submit" value="submit" class="btn btn-primary" />
+                    </form>
+                  </div>
+                  <div class="card-footer text-center">
+                    <div class="small"><a href="{% url 'login' %}">Have an account? Go to login</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

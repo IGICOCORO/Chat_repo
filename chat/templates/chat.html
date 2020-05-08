@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="http://localhost:3000/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="http://localhost:3000/manifest.json">
+  <link href="Chat_fichiers/css.css" rel="stylesheet">
+  <title>Chat</title>
+
+  <meta name="author" content="Muco Rolle Tresor">
+    <style type="text/css">/*
+ * Container style
+ */
+ .ps {
+  overflow: hidden !important;
+  overflow-anchor: none;
+  -ms-overflow-style: none;
+  touch-action: auto;
+  -ms-touch-action: auto;
+}
+
+/*
+ * Scrollbar rail styles
+ */
+ .ps__rail-x {
+  display: none;
+  opacity: 0;
+  transition: background-color .2s linear, opacity .2s linear;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  height: 15px;
+  /* there must be 'bottom' or 'top' for ps__rail-x */
+  bottom: 0px;
+  /* please don't change 'position' */
+  position: absolute;
+}
+
+  .ps__rail-y {
+    display: none;
+    opacity: 0;
+    transition: background-color .2s linear, opacity .2s linear;
+    -webkit-transition: background-color .2s linear, opacity .2s linear;
+    width: 15px;
+    /* there must be 'right' or 'left' for ps__rail-y */
+    right: 0;
+    /* please don't change 'position' */
+    position: absolute;
+  }
+
+    .ps--active-x > .ps__rail-x,
+    .ps--active-y > .ps__rail-y {
+      display: block;
+      background-color: transparent;
+    }
+
+      .ps:hover > .ps__rail-x,
+      .ps:hover > .ps__rail-y,
+      .ps--focus > .ps__rail-x,
+      .ps--focus > .ps__rail-y,
+      .ps--scrolling-x > .ps__rail-x,
+      .ps--scrolling-y > .ps__rail-y {
+        opacity: 0.6;
+      }
+
+        .ps .ps__rail-x:hover,
+        .ps .ps__rail-y:hover,
+        .ps .ps__rail-x:focus,
+        .ps .ps__rail-y:focus,
+        .ps .ps__rail-x.ps--clicking,
+        .ps .ps__rail-y.ps--clicking {
+          background-color: #eee;
+          opacity: 0.9;
+        }
+
+/*
+ * Scrollbar thumb styles
+ */
+ .ps__thumb-x {
+  background-color: #aaa;
+  border-radius: 6px;
+  transition: background-color .2s linear, height .2s ease-in-out;
+  -webkit-transition: background-color .2s linear, height .2s ease-in-out;
+  height: 6px;
+  /* there must be 'bottom' for ps__thumb-x */
+  bottom: 2px;
+  /* please don't change 'position' */
+  position: absolute;
+}
+
+  .ps__thumb-y {
+    background-color: #aaa;
+    border-radius: 6px;
+    transition: background-color .2s linear, width .2s ease-in-out;
+    -webkit-transition: background-color .2s linear, width .2s ease-in-out;
+    width: 6px;
+    /* there must be 'right' for ps__thumb-y */
+    right: 2px;
+    /* please don't change 'position' */
+    position: absolute;
+  }
+
+    .ps__rail-x:hover > .ps__thumb-x,
+    .ps__rail-x:focus > .ps__thumb-x,
+    .ps__rail-x.ps--clicking .ps__thumb-x {
+      background-color: #999;
+      height: 11px;
+    }
+
+      .ps__rail-y:hover > .ps__thumb-y,
+      .ps__rail-y:focus > .ps__thumb-y,
+      .ps__rail-y.ps--clicking .ps__thumb-y {
+        background-color: #999;
+        width: 11px;
+      }
+
+        /* MS supports */
+        @supports (-ms-overflow-style: none) {
+          .ps {
+            overflow: auto !important;
+            } }
+
+            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+              .ps {
+                overflow: auto !important;
+                } }
+
+                .scrollbar-container {
+                  position: relative;
+                  height: 100%;
+                }
+                  </style>
+  <style type="text/css">/**
+ * atom-dark theme for `prism.js`
+ * Based on Atom's `atom-dark` theme: https://github.com/atom/atom-dark-syntax
+ * @author Joe Gibson (@gibsjose)
+ */
+ code[class*='language-'],
+ pre[class*='language-'] {
+  color: #c5c8c6;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  font-size: 14px;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+  /* Code blocks */
+  pre[class*='language-'] {
+    padding: 1em;
+    margin: 0.5em 0;
+    overflow: auto;
+  }
+
+    :not(pre) > code[class*='language-'],
+    pre[class*='language-'] {
+      background: #2d323e;
+    }
+
+      /* Inline code */
+      :not(pre) > code[class*='language-'] {
+        padding: 0.1em;
+        border-radius: 0.3em;
+      }
+
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata {
+          color: #7c7c7c;
+        }
+
+          .token.punctuation {
+            color: #c5c8c6;
+          }
+
+            .namespace {
+              opacity: 0.7;
+            }
+
+              .token.property,
+              .token.keyword,
+              .token.tag {
+                color: #96cbfe;
+              }
+
+                .token.class-name {
+                  color: #ffffb6;
+                }
+
+                  .token.boolean,
+                  .token.constant {
+                    color: #99cc99;
+                  }
+
+                    .token.symbol,
+                    .token.deleted {
+                      color: #f92672;
+                    }
+
+                      .token.number {
+                        color: #ff73fd;
+                      }
+
+                        .token.selector,
+                        .token.attr-name,
+                        .token.string,
+                        .token.char,
+                        .token.builtin,
+                        .token.inserted {
+                          color: #a8ff60;
+                        }
+
+                          .token.variable {
+                            color: #c6c5fe;
+                          }
+
+                            .token.operator {
+                              color: #ededed;
+                            }
+
+                              .token.entity {
+                                color: #ffffb6;
+                              /* text-decoration: underline; */ }
+
+                              .token.url {
+                                color: #96cbfe;
+                              }
+
+                                .language-css .token.string,
+                                .style .token.string {
+                                  color: #87c38a;
+                                }
+
+                                  .token.atrule,
+                                  .token.attr-value {
+                                    color: #f9ee98;
+                                  }
+
+                                    .token.function {
+                                      color: #dad085;
+                                    }
+
+                                      .token.regex {
+                                        color: #e9c062;
+                                      }
+
+                                        .token.important {
+                                          color: #fd971f;
+                                        }
+
+                                          .token.important,
+                                          .token.bold {
+                                            font-weight: bold;
+                                          }
+
+                                            .token.italic {
+                                              font-style: italic;
+                                            }
+
+                                              .token.entity {
+                                                cursor: help;
+                                              }
+
+                                                * {
+                                                  box-sizing: border-box;
+                                                  margin: 0;
+                                                  padding: 0;
+                                                }
+
+                                                  html {
+                                                    height: 100%;
+                                                    -webkit-font-smoothing: antialiased;
+                                                    -moz-osx-font-smoothing: grayscale;
+                                                  }
+
+                                                    body {
+                                                      background-color: #f4f6f8;
+                                                      height: 100%;
+                                                    }
+
+                                                      a {
+                                                        text-decoration: none;
+                                                      }
+
+                                                        #root {
+                                                          height: 100%;
+                                                        }
+
+                                                          :not(pre) > code {
+                                                            font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
+                                                            background-color: #eeeeee;
+                                                            padding: 2px 4px;
+                                                            direction: ltr;
+                                                            white-space: pre;
+                                                            word-spacing: normal;
+                                                            word-break: normal;
+                                                            line-height: 1.5;
+                                                            font-size: 14px;
+                                                          }
+                                                            </style>
+                                                            <style type="text/css">.notification-container-bottom-center,.notification-container-bottom-left,.notification-container-bottom-right,.notification-container-center,.notification-container-top-center,.notification-container-top-left,.notification-container-top-right{width:325px;position:absolute;pointer-events:all}.notification-container-bottom-center,.notification-container-center,.notification-container-top-center{display:flex;justify-content:center;align-items:center;flex-direction:column;left:calc(50% - 162.5px)}.notification-container-center{top:20px;height:100%;pointer-events:none}.notification-container-center .center-inner{width:325px;display:flex;justify-content:center;align-items:center;flex-direction:column;pointer-events:all}.notification-container-top-center{top:20px}.notification-container-bottom-center{bottom:20px}.notification-container-top-left{left:20px;top:20px}.notification-container-top-right{right:20px;top:20px}.notification-container-bottom-left{left:20px;bottom:20px}.notification-container-bottom-right{bottom:20px;right:20px}.notification-container-mobile-bottom,.notification-container-mobile-top{pointer-events:all;position:absolute}.notification-container-mobile-top{right:20px;left:20px;top:20px}.notification-container-mobile-bottom{right:20px;left:20px;bottom:20px;margin-bottom:-15px}.notification-default{border-left:8px solid #0562c7}.notification-default,.notification-default .timer{background-color:#007bff}.notification-default .timer-filler{background-color:#fff}.notification-default .notification-close{background-color:#007bff}.notification-success{border-left:8px solid #1f8838}.notification-success,.notification-success .timer{background-color:#28a745}.notification-success .timer-filler{background-color:#fff}.notification-success .notification-close{background-color:#28a745}.notification-danger{border-left:8px solid #bd1120}.notification-danger,.notification-danger .timer{background-color:#dc3545}.notification-danger .timer-filler{background-color:#fff}.notification-danger .notification-close{background-color:#dc3545}.notification-info{border-left:8px solid #138b9e}.notification-info,.notification-info .timer{background-color:#17a2b8}.notification-info .timer-filler{background-color:#fff}.notification-info .notification-close{background-color:#17a2b8}.notification-warning{border-left:8px solid #ce9c09}.notification-warning,.notification-warning .timer{background-color:#eab000}.notification-warning .timer-filler{background-color:#fff}.notification-warning .notification-close{background-color:#eab000}.notification-awesome{border-left:8px solid #4c3fb1}.notification-awesome,.notification-awesome .timer{background-color:#685dc3}.notification-awesome .timer-filler{background-color:#fff}.notification-awesome .notification-close{background-color:#685dc3}@keyframes timer{0%{width:100%}to{width:0}}.react-notification-root{position:fixed;z-index:9000;pointer-events:none;width:100%;height:100%}.notification-item{display:flex;position:relative;border-radius:3px;margin-bottom:15px;box-shadow:1px 3px 4px rgba(0,0,0,.2);cursor:pointer}.notification-item .timer{width:100%;margin-top:10px}.notification-item .timer,.notification-item .timer .timer-filler{height:3px;border-radius:5px}.notification-item .notification-title{color:#fff;font-weight:700;font-size:14px;margin-top:5px;margin-bottom:5px}.notification-item .notification-message{color:#fff;max-width:calc(100% - 15px);font-size:14px;line-height:150%;word-wrap:break-word;margin-bottom:0;margin-top:0}.notification-item .notification-content{padding:8px 15px;display:inline-block;width:100%}.notification-item .notification-close{width:18px;height:18px;border-radius:50%;display:inline-block;position:absolute;right:10px;top:10px}.notification-item .notification-close:after{content:"\D7";position:absolute;transform:translate(-50%,-50%);color:#fff;font-size:12px;left:50%;top:50%}.notification-container-mobile-bottom .notification-item,.notification-container-mobile-bottom .notification-parent,.notification-container-mobile-top .notification-item,.notification-container-mobile-top .notification-parent{max-width:100%;width:100%}.notification-container-bottom-right .notification-parent,.notification-container-top-right .notification-parent{margin-left:auto}.notification-container-bottom-left .notification-parent,.notification-container-top-left .notification-parent{margin-right:auto}.notification-container-mobile-bottom .notification-parent,.notification-container-mobile-top .notification-parent{margin-left:auto;margin-right:auto}</style>
+                                                            <style data-jss="" data-meta="MuiTypography">
+                                                            .MuiTypography-root {
+                                                              margin: 0;
+                                                            }
+                                                            .MuiTypography-body2 {
+                                                              color: #546e7a;
+                                                              font-size: 12px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 18px;
+                                                              letter-spacing: -0.04px;
+                                                            }
+                                                            .MuiTypography-body1 {
+                                                              color: #263238;
+                                                              font-size: 14px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 21px;
+                                                              letter-spacing: -0.05px;
+                                                            }
+                                                            .MuiTypography-caption {
+                                                              color: #546e7a;
+                                                              font-size: 11px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 13px;
+                                                              letter-spacing: 0.33px;
+                                                            }
+                                                            .MuiTypography-button {
+                                                              color: #263238;
+                                                              font-size: 14px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 1.75;
+                                                              letter-spacing: 0.02857em;
+                                                              text-transform: uppercase;
+                                                            }
+                                                            .MuiTypography-h1 {
+                                                              color: #263238;
+                                                              font-size: 35px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 40px;
+                                                              letter-spacing: -0.24px;
+                                                            }
+                                                            .MuiTypography-h2 {
+                                                              color: #263238;
+                                                              font-size: 29px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 32px;
+                                                              letter-spacing: -0.24px;
+                                                            }
+                                                            .MuiTypography-h3 {
+                                                              color: #263238;
+                                                              font-size: 24px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 28px;
+                                                              letter-spacing: -0.06px;
+                                                            }
+                                                            .MuiTypography-h4 {
+                                                              color: #263238;
+                                                              font-size: 20px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 24px;
+                                                              letter-spacing: -0.06px;
+                                                            }
+                                                            .MuiTypography-h5 {
+                                                              color: #263238;
+                                                              font-size: 16px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 20px;
+                                                              letter-spacing: -0.05px;
+                                                            }
+                                                            .MuiTypography-h6 {
+                                                              color: #263238;
+                                                              font-size: 14px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 20px;
+                                                              letter-spacing: -0.05px;
+                                                            }
+                                                            .MuiTypography-subtitle1 {
+                                                              color: #263238;
+                                                              font-size: 16px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 25px;
+                                                              letter-spacing: -0.05px;
+                                                            }
+                                                            .MuiTypography-subtitle2 {
+                                                              color: #546e7a;
+                                                              font-size: 14px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 21px;
+                                                              letter-spacing: -0.05px;
+                                                            }
+                                                            .MuiTypography-overline {
+                                                              color: #546e7a;
+                                                              font-size: 11px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 13px;
+                                                              letter-spacing: 0.33px;
+                                                              text-transform: uppercase;
+                                                            }
+                                                            .MuiTypography-srOnly {
+                                                              width: 1px;
+                                                              height: 1px;
+                                                              overflow: hidden;
+                                                              position: absolute;
+                                                            }
+                                                            .MuiTypography-alignLeft {
+                                                              text-align: left;
+                                                            }
+                                                            .MuiTypography-alignCenter {
+                                                              text-align: center;
+                                                            }
+                                                            .MuiTypography-alignRight {
+                                                              text-align: right;
+                                                            }
+                                                            .MuiTypography-alignJustify {
+                                                              text-align: justify;
+                                                            }
+                                                            .MuiTypography-noWrap {
+                                                              overflow: hidden;
+                                                              white-space: nowrap;
+                                                              text-overflow: ellipsis;
+                                                            }
+                                                            .MuiTypography-gutterBottom {
+                                                              margin-bottom: 8px;
+                                                            }
+                                                            .MuiTypography-paragraph {
+                                                              margin-bottom: 16px;
+                                                            }
+                                                            .MuiTypography-colorInherit {
+                                                              color: inherit;
+                                                            }
+                                                            .MuiTypography-colorPrimary {
+                                                              color: #56141D;
+                                                            }
+                                                            .MuiTypography-colorSecondary {
+                                                              color: #2979ff;
+                                                            }
+                                                            .MuiTypography-colorTextPrimary {
+                                                              color: #263238;
+                                                            }
+                                                            .MuiTypography-colorTextSecondary {
+                                                              color: #546e7a;
+                                                            }
+                                                            .MuiTypography-colorError {
+                                                              color: #e53935;
+                                                            }
+                                                            .MuiTypography-displayInline {
+                                                              display: inline;
+                                                            }
+                                                            .MuiTypography-displayBlock {
+                                                              display: block;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiTouchRipple">
+                                                            .MuiTouchRipple-root {
+                                                              top: 0;
+                                                              left: 0;
+                                                              width: 100%;
+                                                              height: 100%;
+                                                              display: block;
+                                                              z-index: 0;
+                                                              overflow: hidden;
+                                                              position: absolute;
+                                                              border-radius: inherit;
+                                                              pointer-events: none;
+                                                            }
+                                                            .MuiTouchRipple-ripple {
+                                                              opacity: 0;
+                                                              position: absolute;
+                                                            }
+                                                            .MuiTouchRipple-rippleVisible {
+                                                              opacity: 0.3;
+                                                              animation: MuiTouchRipple-keyframes-mui-ripple-enter 550ms cubic-bezier(0.4, 0, 0.2, 1);
+                                                              transform: scale(1);
+                                                            }
+                                                            .MuiTouchRipple-ripplePulsate {
+                                                              animation-duration: 200ms;
+                                                            }
+                                                            .MuiTouchRipple-child {
+                                                              width: 100%;
+                                                              height: 100%;
+                                                              display: block;
+                                                              opacity: 1;
+                                                              border-radius: 50%;
+                                                              background-color: currentColor;
+                                                            }
+                                                            .MuiTouchRipple-childLeaving {
+                                                              opacity: 0;
+                                                              animation: MuiTouchRipple-keyframes-mui-ripple-exit 550ms cubic-bezier(0.4, 0, 0.2, 1);
+                                                            }
+                                                            .MuiTouchRipple-childPulsate {
+                                                              top: 0;
+                                                              left: 0;
+                                                              position: absolute;
+                                                              animation: MuiTouchRipple-keyframes-mui-ripple-pulsate 2500ms cubic-bezier(0.4, 0, 0.2, 1) 200ms infinite;
+                                                            }
+                                                            @-moz-keyframes MuiTouchRipple-keyframes-mui-ripple-enter {
+                                                              0% {
+                                                                opacity: 0.1;
+                                                                transform: scale(0);
+                                                              }
+                                                              100% {
+                                                                opacity: 0.3;
+                                                                transform: scale(1);
+                                                              }
+                                                            }
+                                                            @-moz-keyframes MuiTouchRipple-keyframes-mui-ripple-exit {
+                                                              0% {
+                                                                opacity: 1;
+                                                              }
+                                                              100% {
+                                                                opacity: 0;
+                                                              }
+                                                            }
+                                                            @-moz-keyframes MuiTouchRipple-keyframes-mui-ripple-pulsate {
+                                                              0% {
+                                                                transform: scale(1);
+                                                              }
+                                                              50% {
+                                                                transform: scale(0.92);
+                                                              }
+                                                              100% {
+                                                                transform: scale(1);
+                                                              }
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiButtonBase">
+                                                            .MuiButtonBase-root {
+                                                              color: inherit;
+                                                              border: 0;
+                                                              cursor: pointer;
+                                                              margin: 0;
+                                                              display: inline-flex;
+                                                              outline: none;
+                                                              padding: 0;
+                                                              position: relative;
+                                                              align-items: center;
+                                                              user-select: none;
+                                                              border-radius: 0;
+                                                              vertical-align: middle;
+                                                              -moz-appearance: none;
+                                                              justify-content: center;
+                                                              text-decoration: none;
+                                                              background-color: transparent;
+                                                              -webkit-appearance: none;
+                                                              -webkit-tap-highlight-color: transparent;
+                                                            }
+                                                            .MuiButtonBase-root::-moz-focus-inner {
+                                                              border-style: none;
+                                                            }
+                                                            .MuiButtonBase-root.Mui-disabled {
+                                                              cursor: default;
+                                                              pointer-events: none;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiToolbar">
+                                                            .MuiToolbar-root {
+                                                              display: flex;
+                                                              position: relative;
+                                                              align-items: center;
+                                                            }
+                                                            .MuiToolbar-gutters {
+                                                              padding-left: 16px;
+                                                              padding-right: 16px;
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiToolbar-gutters {
+                                                                padding-left: 24px;
+                                                                padding-right: 24px;
+                                                              }
+                                                            }
+                                                            .MuiToolbar-regular {
+                                                              min-height: 56px;
+                                                            }
+                                                            @media (min-width:0px) and (orientation: landscape) {
+                                                              .MuiToolbar-regular {
+                                                                min-height: 48px;
+                                                              }
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiToolbar-regular {
+                                                                min-height: 64px;
+                                                              }
+                                                            }
+                                                            .MuiToolbar-dense {
+                                                              min-height: 48px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiIconButton">
+                                                            .MuiIconButton-root {
+                                                              flex: 0 0 auto;
+                                                              color: #546e7a;
+                                                              padding: 12px;
+                                                              overflow: visible;
+                                                              font-size: 1.5rem;
+                                                              text-align: center;
+                                                              transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                              border-radius: 50%;
+                                                            }
+                                                            .MuiIconButton-root:hover {
+                                                              background-color: rgba(0, 0, 0, 0.03);
+                                                            }
+                                                            .MuiIconButton-root.Mui-disabled {
+                                                              color: rgba(0, 0, 0, 0.26);
+                                                              background-color: transparent;
+                                                            }
+                                                            @media (hover: none) {
+                                                              .MuiIconButton-root:hover {
+                                                                background-color: transparent;
+                                                              }
+                                                            }
+                                                            .MuiIconButton-edgeStart {
+                                                              margin-left: -12px;
+                                                            }
+                                                            .MuiIconButton-sizeSmall.MuiIconButton-edgeStart {
+                                                              margin-left: -3px;
+                                                            }
+                                                            .MuiIconButton-edgeEnd {
+                                                              margin-right: -12px;
+                                                            }
+                                                            .MuiIconButton-sizeSmall.MuiIconButton-edgeEnd {
+                                                              margin-right: -3px;
+                                                            }
+                                                            .MuiIconButton-colorInherit {
+                                                              color: inherit;
+                                                            }
+                                                            .MuiIconButton-colorPrimary {
+                                                              color: #56141D;
+                                                            }
+                                                            .MuiIconButton-colorPrimary:hover {
+                                                              background-color: rgba(86, 20, 29, 0.08);
+                                                            }
+                                                            @media (hover: none) {
+                                                              .MuiIconButton-colorPrimary:hover {
+                                                                background-color: transparent;
+                                                              }
+                                                            }
+                                                            .MuiIconButton-colorSecondary {
+                                                              color: #2979ff;
+                                                            }
+                                                            .MuiIconButton-colorSecondary:hover {
+                                                              background-color: rgba(41, 121, 255, 0.08);
+                                                            }
+                                                            @media (hover: none) {
+                                                              .MuiIconButton-colorSecondary:hover {
+                                                                background-color: transparent;
+                                                              }
+                                                            }
+                                                            .MuiIconButton-sizeSmall {
+                                                              padding: 3px;
+                                                              font-size: 1.125rem;
+                                                            }
+                                                            .MuiIconButton-label {
+                                                              width: 100%;
+                                                              display: flex;
+                                                              align-items: inherit;
+                                                              justify-content: inherit;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiSvgIcon">
+                                                            .MuiSvgIcon-root {
+                                                              fill: currentColor;
+                                                              width: 1em;
+                                                              height: 1em;
+                                                              display: inline-block;
+                                                              font-size: 1.5rem;
+                                                              transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                              flex-shrink: 0;
+                                                              user-select: none;
+                                                            }
+                                                            .MuiSvgIcon-colorPrimary {
+                                                              color: #56141D;
+                                                            }
+                                                            .MuiSvgIcon-colorSecondary {
+                                                              color: #2979ff;
+                                                            }
+                                                            .MuiSvgIcon-colorAction {
+                                                              color: rgba(0, 0, 0, 0.54);
+                                                            }
+                                                            .MuiSvgIcon-colorError {
+                                                              color: #e53935;
+                                                            }
+                                                            .MuiSvgIcon-colorDisabled {
+                                                              color: rgba(0, 0, 0, 0.26);
+                                                            }
+                                                            .MuiSvgIcon-fontSizeInherit {
+                                                              font-size: inherit;
+                                                            }
+                                                            .MuiSvgIcon-fontSizeSmall {
+                                                              font-size: 1.25rem;
+                                                            }
+                                                            .MuiSvgIcon-fontSizeLarge {
+                                                              font-size: 2.1875rem;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiPaper">
+                                                            .MuiPaper-root {
+                                                              color: #263238;
+                                                              transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                              background-color: #FFFFFF;
+                                                            }
+                                                            .MuiPaper-rounded {
+                                                              border-radius: 4px;
+                                                            }
+                                                            .MuiPaper-elevation0 {
+                                                              box-shadow: none;
+                                                            }
+                                                            .MuiPaper-elevation1 {
+                                                              box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+                                                            }
+                                                            .MuiPaper-elevation2 {
+                                                              box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation3 {
+                                                              box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation4 {
+                                                              box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation5 {
+                                                              box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation6 {
+                                                              box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation7 {
+                                                              box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation8 {
+                                                              box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation9 {
+                                                              box-shadow: 0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation10 {
+                                                              box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation11 {
+                                                              box-shadow: 0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation12 {
+                                                              box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation13 {
+                                                              box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation14 {
+                                                              box-shadow: 0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation15 {
+                                                              box-shadow: 0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation16 {
+                                                              box-shadow: 0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation17 {
+                                                              box-shadow: 0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation18 {
+                                                              box-shadow: 0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation19 {
+                                                              box-shadow: 0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation20 {
+                                                              box-shadow: 0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation21 {
+                                                              box-shadow: 0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation22 {
+                                                              box-shadow: 0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation23 {
+                                                              box-shadow: 0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12);
+                                                            }
+                                                            .MuiPaper-elevation24 {
+                                                              box-shadow: 0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12);
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiAppBar">
+                                                            .MuiAppBar-root {
+                                                              width: 100%;
+                                                              display: flex;
+                                                              z-index: 1100;
+                                                              box-sizing: border-box;
+                                                              flex-shrink: 0;
+                                                              flex-direction: column;
+                                                            }
+                                                            .MuiAppBar-positionFixed {
+                                                              top: 0;
+                                                              left: auto;
+                                                              right: 0;
+                                                              position: fixed;
+                                                            }
+                                                            .MuiAppBar-positionAbsolute {
+                                                              top: 0;
+                                                              left: auto;
+                                                              right: 0;
+                                                              position: absolute;
+                                                            }
+                                                            .MuiAppBar-positionSticky {
+                                                              top: 0;
+                                                              left: auto;
+                                                              right: 0;
+                                                              position: sticky;
+                                                            }
+                                                            .MuiAppBar-positionStatic {
+                                                              position: static;
+                                                            }
+                                                            .MuiAppBar-positionRelative {
+                                                              position: relative;
+                                                            }
+                                                            .MuiAppBar-colorDefault {
+                                                              color: rgba(0, 0, 0, 0.87);
+                                                              background-color: #f5f5f5;
+                                                            }
+                                                            .MuiAppBar-colorPrimary {
+                                                              color: #FFFFFF;
+                                                              background-color: #56141D;
+                                                            }
+                                                            .MuiAppBar-colorSecondary {
+                                                              color: #FFFFFF;
+                                                              background-color: #2979ff;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiAvatar">
+                                                            .MuiAvatar-root {
+                                                              width: 40px;
+                                                              height: 40px;
+                                                              display: flex;
+                                                              overflow: hidden;
+                                                              position: relative;
+                                                              font-size: 1.25rem;
+                                                              align-items: center;
+                                                              flex-shrink: 0;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              user-select: none;
+                                                              border-radius: 50%;
+                                                              justify-content: center;
+                                                            }
+                                                            .MuiAvatar-colorDefault {
+                                                              color: #F4F6F8;
+                                                              background-color: #bdbdbd;
+                                                            }
+                                                            .MuiAvatar-img {
+                                                              width: 100%;
+                                                              height: 100%;
+                                                              object-fit: cover;
+                                                              text-align: center;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiDivider">
+                                                            .MuiDivider-root {
+                                                              border: none;
+                                                              height: 1px;
+                                                              margin: 0;
+                                                              flex-shrink: 0;
+                                                              background-color: #eeeeee;
+                                                            }
+                                                            .MuiDivider-absolute {
+                                                              left: 0;
+                                                              width: 100%;
+                                                              bottom: 0;
+                                                              position: absolute;
+                                                            }
+                                                            .MuiDivider-inset {
+                                                              margin-left: 72px;
+                                                            }
+                                                            .MuiDivider-light {
+                                                              background-color: rgba(238, 238, 238, 0.08);
+                                                            }
+                                                            .MuiDivider-middle {
+                                                              margin-left: 16px;
+                                                              margin-right: 16px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiInputBase">
+                                                            .MuiInputBase-root {
+                                                              color: #263238;
+                                                              cursor: text;
+                                                              display: inline-flex;
+                                                              position: relative;
+                                                              font-size: 1rem;
+                                                              box-sizing: border-box;
+                                                              align-items: center;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              line-height: 1.1875em;
+                                                            }
+                                                            .MuiInputBase-root.Mui-disabled {
+                                                              color: rgba(0, 0, 0, 0.38);
+                                                              cursor: default;
+                                                            }
+                                                            .MuiInputBase-multiline {
+                                                              padding: 6px 0 7px;
+                                                            }
+                                                            .MuiInputBase-multiline.MuiInputBase-marginDense {
+                                                              padding-top: 3px;
+                                                            }
+                                                            .MuiInputBase-fullWidth {
+                                                              width: 100%;
+                                                            }
+                                                            .MuiInputBase-input {
+                                                              font: inherit;
+                                                              color: currentColor;
+                                                              width: 100%;
+                                                              border: 0;
+                                                              height: 1.1875em;
+                                                              margin: 0;
+                                                              display: block;
+                                                              padding: 6px 0 7px;
+                                                              min-width: 0;
+                                                              background: none;
+                                                              box-sizing: content-box;
+                                                              -webkit-tap-highlight-color: transparent;
+                                                            }
+                                                            .MuiInputBase-input::-webkit-input-placeholder {
+                                                              color: currentColor;
+                                                              opacity: 0.42;
+                                                              transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                            }
+                                                            .MuiInputBase-input::-moz-placeholder {
+                                                              color: currentColor;
+                                                              opacity: 0.42;
+                                                              transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                            }
+                                                            .MuiInputBase-input:-ms-input-placeholder {
+                                                              color: currentColor;
+                                                              opacity: 0.42;
+                                                              transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                            }
+                                                            .MuiInputBase-input::-ms-input-placeholder {
+                                                              color: currentColor;
+                                                              opacity: 0.42;
+                                                              transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                            }
+                                                            .MuiInputBase-input:focus {
+                                                              outline: 0;
+                                                            }
+                                                            .MuiInputBase-input:invalid {
+                                                              box-shadow: none;
+                                                            }
+                                                            .MuiInputBase-input::-webkit-search-decoration {
+                                                              -webkit-appearance: none;
+                                                            }
+                                                            .MuiInputBase-input.Mui-disabled {
+                                                              opacity: 1;
+                                                            }
+                                                            .MuiInputBase-input::placeholder {
+                                                              color: #546e7a;
+                                                              opacity: 1;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-webkit-input-placeholder {
+                                                              opacity: 0 !important;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-moz-placeholder {
+                                                              opacity: 0 !important;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:-ms-input-placeholder {
+                                                              opacity: 0 !important;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-ms-input-placeholder {
+                                                              opacity: 0 !important;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-webkit-input-placeholder {
+                                                              opacity: 0.42;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-moz-placeholder {
+                                                              opacity: 0.42;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus:-ms-input-placeholder {
+                                                              opacity: 0.42;
+                                                            }
+                                                            label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-ms-input-placeholder {
+                                                              opacity: 0.42;
+                                                            }
+                                                            .MuiInputBase-inputMarginDense {
+                                                              padding-top: 3px;
+                                                            }
+                                                            .MuiInputBase-inputSelect {
+                                                              padding-right: 24px;
+                                                            }
+                                                            .MuiInputBase-inputMultiline {
+                                                              height: auto;
+                                                              resize: none;
+                                                              padding: 0;
+                                                            }
+                                                            .MuiInputBase-inputTypeSearch {
+                                                              -moz-appearance: textfield;
+                                                              -webkit-appearance: textfield;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiInput">
+                                                            .MuiInput-root {
+                                                              position: relative;
+                                                            }
+                                                            label + .MuiInput-formControl {
+                                                              margin-top: 16px;
+                                                            }
+                                                            .MuiInput-underline:after {
+                                                              left: 0;
+                                                              right: 0;
+                                                              bottom: 0;
+                                                              content: "";
+                                                              position: absolute;
+                                                              transform: scaleX(0);
+                                                              transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+                                                              border-bottom: 2px solid #290316;
+                                                              pointer-events: none;
+                                                            }
+                                                            .MuiInput-underline.Mui-focused:after {
+                                                              transform: scaleX(1);
+                                                            }
+                                                            .MuiInput-underline.Mui-error:after {
+                                                              transform: scaleX(1);
+                                                              border-bottom-color: #e53935;
+                                                            }
+                                                            .MuiInput-underline:before {
+                                                              left: 0;
+                                                              right: 0;
+                                                              bottom: 0;
+                                                              content: "\00a0";
+                                                              position: absolute;
+                                                              transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                              border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+                                                              pointer-events: none;
+                                                            }
+                                                            .MuiInput-underline:hover:not(.Mui-disabled):before {
+                                                              border-bottom: 2px solid #263238;
+                                                            }
+                                                            .MuiInput-underline.Mui-disabled:before {
+                                                              border-bottom-style: dotted;
+                                                            }
+                                                            @media (hover: none) {
+                                                              .MuiInput-underline:hover:not(.Mui-disabled):before {
+                                                                border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+                                                              }
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiLink">
+                                                            .MuiLink-underlineNone {
+                                                              text-decoration: none;
+                                                            }
+                                                            .MuiLink-underlineHover {
+                                                              text-decoration: none;
+                                                            }
+                                                            .MuiLink-underlineHover:hover {
+                                                              text-decoration: underline;
+                                                            }
+                                                            .MuiLink-underlineAlways {
+                                                              text-decoration: underline;
+                                                            }
+                                                            .MuiLink-button {
+                                                              border: 0;
+                                                              cursor: pointer;
+                                                              margin: 0;
+                                                              outline: none;
+                                                              padding: 0;
+                                                              position: relative;
+                                                              user-select: none;
+                                                              border-radius: 0;
+                                                              vertical-align: middle;
+                                                              -moz-appearance: none;
+                                                              background-color: transparent;
+                                                              -webkit-appearance: none;
+                                                              -webkit-tap-highlight-color: transparent;
+                                                            }
+                                                            .MuiLink-button::-moz-focus-inner {
+                                                              border-style: none;
+                                                            }
+                                                            .MuiLink-button.Mui-focusVisible {
+                                                              outline: auto;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiList">
+                                                            .MuiList-root {
+                                                              margin: 0;
+                                                              padding: 0;
+                                                              position: relative;
+                                                              list-style: none;
+                                                            }
+                                                            .MuiList-padding {
+                                                              padding-top: 8px;
+                                                              padding-bottom: 8px;
+                                                            }
+                                                            .MuiList-subheader {
+                                                              padding-top: 0;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiListItem">
+                                                            .MuiListItem-root {
+                                                              width: 100%;
+                                                              display: flex;
+                                                              position: relative;
+                                                              box-sizing: border-box;
+                                                              text-align: left;
+                                                              align-items: center;
+                                                              padding-top: 8px;
+                                                              padding-bottom: 8px;
+                                                              justify-content: flex-start;
+                                                              text-decoration: none;
+                                                            }
+                                                            .MuiListItem-root.Mui-focusVisible {
+                                                              background-color: rgba(0, 0, 0, 0.14);
+                                                            }
+                                                            .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
+                                                              background-color: rgba(0, 0, 0, 0.14);
+                                                            }
+                                                            .MuiListItem-root.Mui-disabled {
+                                                              opacity: 0.5;
+                                                            }
+                                                            .MuiListItem-container {
+                                                              position: relative;
+                                                            }
+                                                            .MuiListItem-dense {
+                                                              padding-top: 4px;
+                                                              padding-bottom: 4px;
+                                                            }
+                                                            .MuiListItem-alignItemsFlexStart {
+                                                              align-items: flex-start;
+                                                            }
+                                                            .MuiListItem-divider {
+                                                              border-bottom: 1px solid #eeeeee;
+                                                              background-clip: padding-box;
+                                                            }
+                                                            .MuiListItem-gutters {
+                                                              padding-left: 16px;
+                                                              padding-right: 16px;
+                                                            }
+                                                            .MuiListItem-button {
+                                                              transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                                                            }
+                                                            .MuiListItem-button:hover {
+                                                              text-decoration: none;
+                                                              background-color: rgba(0, 0, 0, 0.08);
+                                                            }
+                                                            @media (hover: none) {
+                                                              .MuiListItem-button:hover {
+                                                                background-color: transparent;
+                                                              }
+                                                            }
+                                                            .MuiListItem-secondaryAction {
+                                                              padding-right: 48px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiListItemAvatar">
+                                                            .MuiListItemAvatar-root {
+                                                              min-width: 56px;
+                                                              flex-shrink: 0;
+                                                            }
+                                                            .MuiListItemAvatar-alignItemsFlexStart {
+                                                              margin-top: 8px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiListItemIcon">
+                                                            .MuiListItemIcon-root {
+                                                              color: #546e7a;
+                                                              display: inline-flex;
+                                                              min-width: 32px;
+                                                              flex-shrink: 0;
+                                                            }
+                                                            .MuiListItemIcon-alignItemsFlexStart {
+                                                              margin-top: 8px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiListItemText">
+                                                            .MuiListItemText-root {
+                                                              flex: 1 1 auto;
+                                                              min-width: 0;
+                                                              margin-top: 4px;
+                                                              margin-bottom: 4px;
+                                                            }
+                                                            .MuiListItemText-multiline {
+                                                              margin-top: 6px;
+                                                              margin-bottom: 6px;
+                                                            }
+                                                            .MuiListItemText-inset {
+                                                              padding-left: 56px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiPopover">
+                                                            .MuiPopover-paper {
+                                                              outline: none;
+                                                              position: absolute;
+                                                              max-width: calc(100% - 32px);
+                                                              min-width: 16px;
+                                                              max-height: calc(100% - 32px);
+                                                              min-height: 16px;
+                                                              overflow-x: hidden;
+                                                              overflow-y: auto;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiMenu">
+                                                            .MuiMenu-paper {
+                                                              max-height: calc(100% - 96px);
+                                                              -webkit-overflow-scrolling: touch;
+                                                            }
+                                                            .MuiMenu-list {
+                                                              outline: none;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiMenuItem">
+                                                            .MuiMenuItem-root {
+                                                              color: #263238;
+                                                              width: auto;
+                                                              overflow: hidden;
+                                                              font-size: 16px;
+                                                              box-sizing: border-box;
+                                                              min-height: 48px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 400;
+                                                              line-height: 25px;
+                                                              padding-top: 4px;
+                                                              white-space: nowrap;
+                                                              letter-spacing: -0.05px;
+                                                              padding-bottom: 4px;
+                                                            }
+                                                            .MuiMenuItem-gutters {
+                                                              padding-left: 16px;
+                                                              padding-right: 16px;
+                                                            }
+                                                            .MuiMenuItem-dense {
+                                                              min-height: auto;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="MuiTooltip">
+                                                            .MuiTooltip-popper {
+                                                              top: 0;
+                                                              flip: false;
+                                                              left: 0;
+                                                              z-index: 1500;
+                                                              position: absolute;
+                                                              pointer-events: none;
+                                                            }
+                                                            .MuiTooltip-popperInteractive {
+                                                              pointer-events: auto;
+                                                            }
+                                                            .MuiTooltip-tooltip {
+                                                              color: #fff;
+                                                              padding: 4px 8px;
+                                                              font-size: 0.625rem;
+                                                              max-width: 300px;
+                                                              font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                                                              font-weight: 500;
+                                                              line-height: 1.4em;
+                                                              border-radius: 4px;
+                                                              background-color: rgba(97, 97, 97, 0.9);
+                                                            }
+                                                            .MuiTooltip-touch {
+                                                              padding: 8px 16px;
+                                                              font-size: 0.875rem;
+                                                              font-weight: 400;
+                                                              line-height: 1.14286em;
+                                                            }
+                                                            .MuiTooltip-tooltipPlacementLeft {
+                                                              margin: 0 24px ;
+                                                              transform-origin: right center;
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiTooltip-tooltipPlacementLeft {
+                                                                margin: 0 14px;
+                                                              }
+                                                            }
+                                                            .MuiTooltip-tooltipPlacementRight {
+                                                              margin: 0 24px;
+                                                              transform-origin: left center;
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiTooltip-tooltipPlacementRight {
+                                                                margin: 0 14px;
+                                                              }
+                                                            }
+                                                            .MuiTooltip-tooltipPlacementTop {
+                                                              margin: 24px 0;
+                                                              transform-origin: center bottom;
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiTooltip-tooltipPlacementTop {
+                                                                margin: 14px 0;
+                                                              }
+                                                            }
+                                                            .MuiTooltip-tooltipPlacementBottom {
+                                                              margin: 24px 0;
+                                                              transform-origin: center top;
+                                                            }
+                                                            @media (min-width:600px) {
+                                                              .MuiTooltip-tooltipPlacementBottom {
+                                                                margin: 14px 0;
+                                                              }
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-351 {
+                                                              height: 20px;
+                                                              display: inline-flex;
+                                                              padding: 4px 8px;
+                                                              flex-grow: 0;
+                                                              font-size: 10px;
+                                                              min-width: 20px;
+                                                              align-items: center;
+                                                              flex-shrink: 0;
+                                                              line-height: 10px;
+                                                              white-space: nowrap;
+                                                              border-radius: 4px;
+                                                              justify-content: center;
+                                                            }
+                                                            .makeStyles-rounded-352 {
+                                                              padding: 4px;
+                                                              border-radius: 10px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-6 {
+                                                              background: white;
+                                                              box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 31px;
+                                                            }
+                                                            .makeStyles-flexGrow-7 {
+                                                              flex-grow: 1;
+                                                            }
+                                                            .makeStyles-search-8 {
+                                                              height: 36px;
+                                                              display: flex;
+                                                              padding: 0px 16px;
+                                                              flex-basis: 300px;
+                                                              align-items: center;
+                                                              border-radius: 4px;
+                                                              background-color: rgba(255,255,255, 0.1);
+                                                            }
+                                                            .makeStyles-searchIcon-9 {
+                                                              color: inherit;
+                                                              margin-right: 16px;
+                                                            }
+                                                            .makeStyles-searchInput-10 {
+                                                              color: inherit;
+                                                              flex-grow: 1;
+                                                            }
+                                                            .makeStyles-searchInput-10 input::placeholder {
+                                                              color: inherit;
+                                                              opacity: 1;
+                                                            }
+                                                            .makeStyles-searchPopper-11 {
+                                                              z-index: 1200;
+                                                            }
+                                                            .makeStyles-searchPopperContent-12 {
+                                                              margin-top: 8px;
+                                                            }
+                                                            .makeStyles-trialButton-13 {
+                                                              color: #FFFFFF;
+                                                              margin-left: 16px;
+                                                              background-color: #43a047;
+                                                            }
+                                                            .makeStyles-trialButton-13:hover {
+                                                              background-color: #1b5e20;
+                                                            }
+                                                            .makeStyles-trialIcon-14 {
+                                                              margin-right: 8px;
+                                                            }
+                                                            .makeStyles-notificationsButton-15 {
+                                                              margin-left: 8px;
+                                                            }
+                                                            .makeStyles-notificationsBadge-16 {
+                                                              background-color: #fb8c00;
+                                                            }
+                                                            .makeStyles-logoutButton-17 {
+                                                              margin-left: 8px;
+                                                            }
+                                                            .makeStyles-logoutIcon-18 {
+                                                              margin-right: 8px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-1 {
+                                                              width: 100%;
+                                                              height: 100%;
+                                                              display: flex;
+                                                              overflow: hidden;
+                                                              flex-direction: column;
+                                                            }
+                                                            .makeStyles-topBar-2 {
+                                                              z-index: 2;
+                                                              position: relative;
+                                                            }
+                                                            .makeStyles-container-3 {
+                                                              flex: 1 1 auto;
+                                                              display: flex;
+                                                              overflow: hidden;
+                                                            }
+                                                            .makeStyles-navBar-4 {
+                                                              flex: 0 0 auto;
+                                                              width: 256px;
+                                                              z-index: 3;
+                                                              min-width: 256px;
+                                                            }
+                                                            .makeStyles-content-5 {
+                                                              flex: 1 1 auto;
+                                                              overflow-y: auto;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-active-328 {
+                                                              box-shadow: inset 4px 0px 0px #56141D;
+                                                              background-color: #fafafa;
+                                                            }
+                                                            .makeStyles-avatar-329 {
+                                                              width: 40px;
+                                                              height: 40px;
+                                                            }
+                                                            .makeStyles-details-330 {
+                                                              display: flex;
+                                                              align-items: flex-end;
+                                                              margin-left: 16px;
+                                                              flex-direction: column;
+                                                            }
+                                                            .makeStyles-unread-331 {
+                                                              height: 18px;
+                                                              padding: 2px;
+                                                              min-width: 18px;
+                                                              margin-top: 2px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-253 {
+                                                              background-color: #FFFFFF;
+                                                            }
+                                                            .makeStyles-searchInput-254 {
+                                                              flex-grow: 1;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-354 {
+                                                              background-color: #FFFFFF;
+                                                            }
+                                                            .makeStyles-backButton-355 {
+                                                              margin-right: 16px;
+                                                            }
+                                                            @media (min-width: 864px) {
+                                                              .makeStyles-backButton-355 {
+                                                                display: none;
+                                                              }
+                                                            }
+                                                            .makeStyles-user-356 {
+                                                              flex-grow: 1;
+                                                              flex-shrink: 0;
+                                                            }
+                                                            .makeStyles-activity-357 {
+                                                              display: flex;
+                                                              align-items: center;
+                                                            }
+                                                            .makeStyles-statusBullet-358 {
+                                                              margin-right: 8px;
+                                                            }
+                                                            .makeStyles-search-359 {
+                                                              height: 42px;
+                                                              display: flex;
+                                                              padding: 0px 16px;
+                                                              flex-basis: 300px;
+                                                              align-items: center;
+                                                              margin-left: auto;
+                                                            }
+                                                            @media (max-width:959.95px) {
+                                                              .makeStyles-search-359 {
+                                                                flex: 1 1 auto;
+                                                              }
+                                                            }
+                                                            .makeStyles-searchIcon-360 {
+                                                              color: #546e7a;
+                                                              margin-right: 16px;
+                                                            }
+                                                            .makeStyles-searchInput-361 {
+                                                              flex-grow: 1;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-367 {
+                                                              margin-bottom: 16px;
+                                                            }
+                                                            .makeStyles-authUser-368 {
+                                                              display: flex;
+                                                              justify-content: flex-end;
+                                                            }
+                                                            .makeStyles-authUser-368 .makeStyles-body-371 {
+                                                              color: #FFFFFF;
+                                                              background-color: #56141D;
+                                                            }
+                                                            .makeStyles-inner-369 {
+                                                              display: flex;
+                                                              max-width: 500px;
+                                                            }
+                                                            .makeStyles-avatar-370 {
+                                                              margin-right: 16px;
+                                                            }
+                                                            .makeStyles-body-371 {
+                                                              color: #263238;
+                                                              padding: 8px 16px;
+                                                              border-radius: 4px;
+                                                              background-color: #f5f5f5;
+                                                            }
+                                                            .makeStyles-content-372 {
+                                                              margin-top: 8px;
+                                                            }
+                                                            .makeStyles-image-373 {
+                                                              width: 380px;
+                                                              height: auto;
+                                                              max-width: 100%;
+                                                              margin-top: 16px;
+                                                            }
+                                                            .makeStyles-footer-374 {
+                                                              display: flex;
+                                                              margin-top: 8px;
+                                                              justify-content: flex-end;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-365 {
+                                                              overflow: hidden;
+                                                              flex-grow: 1;
+                                                              max-height: 100%;
+                                                            }
+                                                            .makeStyles-inner-366 {
+                                                              padding: 16px;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-381 {
+                                                              display: flex;
+                                                              padding: 8px 16px;
+                                                              align-items: center;
+                                                              background-color: #FFFFFF;
+                                                            }
+                                                            .makeStyles-paper-382 {
+                                                              padding: 4px 16px;
+                                                              flex-grow: 1;
+                                                              margin-left: 16px;
+                                                            }
+                                                            .makeStyles-input-383 {
+                                                              width: 100%;
+                                                            }
+                                                            .makeStyles-divider-384 {
+                                                              width: 1px;
+                                                              height: 24px;
+                                                            }
+                                                            .makeStyles-fileInput-385 {
+                                                              display: none;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-353 {
+                                                              display: flex;
+                                                              flex-direction: column;
+                                                              background-color: #FFFFFF;
+                                                            }
+                                                            </style>
+                                                            <style data-jss="" data-meta="makeStyles">
+                                                            .makeStyles-root-248 {
+                                                              cursor: pointer;
+                                                              height: 100%;
+                                                              display: flex;
+                                                              overflow: hidden;
+                                                            }
+                                                            @media (max-width: 863px) {
+                                                              .makeStyles-root-248 .makeStyles-conversationList-250, .makeStyles-root-248 .makeStyles-conversationDetails-251 {
+                                                                width: 100%;
+                                                                max-width: none;
+                                                                transform: translateX(0);
+                                                                flex-basis: 100%;
+                                                                flex-shrink: 0;
+                                                              }
+                                                            }
+                                                            @media (max-width: 863px) {
+                                                              .makeStyles-openConversion-249 .makeStyles-conversationList-250, .makeStyles-openConversion-249 .makeStyles-conversationDetails-251 {
+                                                                transform: translateX(-100%);
+                                                              }
+                                                            }
+                                                            .makeStyles-conversationList-250 {
+                                                              width: 300px;
+                                                              flex-basis: 300px;
+                                                              flex-shrink: 0;
+                                                            }
+                                                            @media (min-width: 864px) {
+                                                              .makeStyles-conversationList-250 {
+                                                                border-right: 1px solid #eeeeee;
+                                                              }
+                                                            }
+                                                            .makeStyles-conversationDetails-251 {
+                                                              flex-grow: 1;
+                                                            }
+                                                            .makeStyles-conversationPlaceholder-252 {
+                                                              flex-grow: 1;
+                                                            }
+                                                            </style>
+                                                            <script charset="utf-8" src="Chat_fichiers/0.js">
+                                                            </script>
+                                                          </head>
+                                                          <script>(function scriptToInject () {
+                                                            window._REACT_CONTEXT_DEVTOOL = data => {
+                                                              const parsedData = JSON.stringify(data, function(k, v) {
+                                                                if (typeof v === 'function') {
+                                                                  return 'function () {}';
+                                                                }
+                                                                return v;
+                                                              });
+                                                              window.postMessage({ type: "REACT_CONTEXT_DEVTOOL_EXTENSION", data: JSON.parse(parsedData) }, "*")
+                                                            };
+                                                          })();</script>
+                                                          <body>
+                                                            <noscript>You need to enable JavaScript to run this app.</noscript>
+                                                            <div id="root">
+                                                              <div class="react-notification-root ">
+                                                                <div class="notification-container-top-left">
+                                                                </div>
+                                                                <div class="notification-container-top-right">
+                                                                </div>
+                                                                <div class="notification-container-bottom-left">
+                                                                </div>
+                                                                <div class="notification-container-bottom-right">
+                                                                </div>
+                                                                <div class="notification-container-top-center">
+                                                                </div>
+                                                                <div class="notification-container-center">
+                                                                  <div class="center-inner">
+                                                                  </div>
+                                                                </div>
+                                                                <div class="notification-container-bottom-center">
+                                                                </div>
+                                                              </div>
+                                                              <div class="makeStyles-root-1">
+                                                                <header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionFixed makeStyles-root-6 makeStyles-topBar-2 MuiAppBar-colorPrimary mui-fixed">
+                                                                  <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
+                                                                    <a href="http://localhost:3000/">
+                                                                      <img alt="Logo" src="Chat_fichiers/logo.png">
+                                                                    </a>
+                                                                    <div class="makeStyles-flexGrow-7">
+                                                                    </div>
+                                                                    <div class="makeStyles-search-8">
+                                                                      <svg class="MuiSvgIcon-root makeStyles-searchIcon-9" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                                                                        </path>
+                                                                      </svg>
+                                                                      <div class="MuiInputBase-root MuiInput-root makeStyles-searchInput-10">
+                                                                        <input class="MuiInputBase-input MuiInput-input" placeholder="Search people &amp; places" type="text">
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="MuiAvatar-root MuiAvatar-colorDefault">M</div>
+                                                                  </div>
+                                                                </header>
+                                                                <div class="makeStyles-container-3">
+                                                                  <main class="makeStyles-content-5">
+                                                                    <div class="makeStyles-root-248 makeStyles-openConversion-249">
+                                                                      <div class="makeStyles-root-253 makeStyles-conversationList-250">
+                                                                        <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
+                                                                          <div class="MuiInputBase-root MuiInput-root makeStyles-searchInput-254">
+                                                                            <input class="MuiInputBase-input MuiInput-input" placeholder="Search contacts" type="text">
+                                                                          </div>
+                                                                          <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Search">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </button>
+                                                                        </div>
+                                                                        <hr class="MuiDivider-root">
+                                                                        <ul class="MuiList-root">
+                                                                          <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f258c0c0-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_7.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Adam Denisov</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Adam Denisov: /images/projects/project_1.jpg</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">9:16 PM</p>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f2595d00-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_2.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Ekaterina Tankova</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Ekaterina Tankova: I don't think that's ideal</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">9:12 PM</p>
+                                                                              <span class="MuiTypography-root makeStyles-root-351 makeStyles-rounded-352 makeStyles-unread-331 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">3</span>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <a class="MuiButtonBase-root MuiListItem-root makeStyles-active-328 MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f2595d03-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_9.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Emilee Simchenko</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Shen Zhi: Alright then</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">8:17 PM</p>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f2598412-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_10.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Kwak Seong-Min</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Kwak Seong-Min: Haha, right, we'll do it</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">2d ago</p>
+                                                                              <span class="MuiTypography-root makeStyles-root-351 makeStyles-rounded-352 makeStyles-unread-331 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">1</span>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f259ab22-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_3.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Cao Yu</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Cao Yu: I'm not sure, but I will check it later</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">2d ago</p>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/f259f940-908e-11ea-9c1c-49f94db2c2dc">
+                                                                            <div class="MuiListItemAvatar-root">
+                                                                              <div class="MuiAvatar-root makeStyles-avatar-329">
+                                                                                <img alt="Person" src="Chat_fichiers/avatar_6.png" class="MuiAvatar-img">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="MuiListItemText-root MuiListItemText-multiline">
+                                                                              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">Clarke Gillebert</span>
+                                                                              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">Shen Zhi: Haha thank you Clarke, I'm doing our best</p>
+                                                                            </div>
+                                                                            <div class="makeStyles-details-330">
+                                                                              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">3d ago</p>
+                                                                            </div>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                        </ul>
+                                                                      </div>
+                                                                      <div class="makeStyles-root-353 makeStyles-conversationDetails-251">
+                                                                        <div class="MuiToolbar-root MuiToolbar-regular makeStyles-root-354 MuiToolbar-gutters">
+                                                                          <a class="MuiButtonBase-root MuiIconButton-root makeStyles-backButton-355 MuiIconButton-edgeStart" tabindex="0" role="button" aria-disabled="false" title="Back" href="http://localhost:3000/chat">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </a>
+                                                                          <div class="makeStyles-user-356">
+                                                                            <h6 class="MuiTypography-root MuiTypography-h6">Emilee Simchenko</h6>
+                                                                            <div class="makeStyles-activity-357">
+                                                                              <p class="MuiTypography-root MuiTypography-body2">Active 2m ago</p>
+                                                                            </div>
+                                                                          </div>
+                                                                          <div class="MuiPaper-root MuiPaper-elevation1 makeStyles-search-359 MuiPaper-rounded">
+                                                                            <svg class="MuiSvgIcon-root makeStyles-searchIcon-360" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                                                                              </path>
+                                                                            </svg>
+                                                                            <div class="MuiInputBase-root MuiInput-root makeStyles-searchInput-361">
+                                                                              <input class="MuiInputBase-input MuiInput-input" placeholder="Search email" type="text">
+                                                                            </div>
+                                                                          </div>
+                                                                          <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" title="More options">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </button>
+                                                                        </div>
+                                                                        <hr class="MuiDivider-root">
+                                                                        <div class="makeStyles-root-365">
+                                                                          <div class="scrollbar-container ps">
+                                                                            <div class="makeStyles-inner-366">
+                                                                              <div class="makeStyles-root-367">
+                                                                                <div class="makeStyles-inner-369">
+                                                                                  <a class="MuiAvatar-root makeStyles-avatar-370" href="http://localhost:3000/profile/1/timeline">
+                                                                                    <img src="Chat_fichiers/avatar_9.png" class="MuiAvatar-img">
+                                                                                  </a>
+                                                                                  <div>
+                                                                                    <div class="makeStyles-body-371">
+                                                                                      <div>
+                                                                                        <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit" href="http://localhost:3000/profile/1/timeline">Emilee Simchenko</a>
+                                                                                      </div>
+                                                                                      <div class="makeStyles-content-372">
+                                                                                        <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">Hi Shen, we should submit the product today</p>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="makeStyles-footer-374">
+                                                                                      <p class="MuiTypography-root MuiTypography-body2">2h ago</p>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                              <div class="makeStyles-root-367 makeStyles-authUser-368">
+                                                                                <div class="makeStyles-inner-369">
+                                                                                  <a class="MuiAvatar-root makeStyles-avatar-370" href="http://localhost:3000/profile/1/timeline">
+                                                                                    <img src="Chat_fichiers/avatar_11.png" class="MuiAvatar-img">
+                                                                                  </a>
+                                                                                  <div>
+                                                                                    <div class="makeStyles-body-371">
+                                                                                      <div>
+                                                                                        <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit" href="http://localhost:3000/profile/1/timeline">Me</a>
+                                                                                      </div>
+                                                                                      <div class="makeStyles-content-372">
+                                                                                        <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">Oh, totally forgot about it</p>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="makeStyles-footer-374">
+                                                                                      <p class="MuiTypography-root MuiTypography-body2">1h ago</p>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                              <div class="makeStyles-root-367 makeStyles-authUser-368">
+                                                                                <div class="makeStyles-inner-369">
+                                                                                  <a class="MuiAvatar-root makeStyles-avatar-370" href="http://localhost:3000/profile/1/timeline">
+                                                                                    <img src="Chat_fichiers/avatar_11.png" class="MuiAvatar-img">
+                                                                                  </a>
+                                                                                  <div>
+                                                                                    <div class="makeStyles-body-371">
+                                                                                      <div>
+                                                                                        <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit" href="http://localhost:3000/profile/1/timeline">Me</a>
+                                                                                      </div>
+                                                                                      <div class="makeStyles-content-372">
+                                                                                        <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">Alright then</p>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="makeStyles-footer-374">
+                                                                                      <p class="MuiTypography-root MuiTypography-body2">1h ago</p>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                                                                              <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="ps__rail-y" style="top: 0px; right: 0px;">
+                                                                              <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                        <hr class="MuiDivider-root">
+                                                                        <div class="makeStyles-root-381">
+                                                                          <div class="MuiAvatar-root">
+                                                                            <img alt="Person" src="Chat_fichiers/avatar_11.png" class="MuiAvatar-img">
+                                                                          </div>
+                                                                          <div class="MuiPaper-root MuiPaper-elevation1 makeStyles-paper-382 MuiPaper-rounded">
+                                                                            <div class="MuiInputBase-root MuiInput-root makeStyles-input-383">
+                                                                              <input class="MuiInputBase-input MuiInput-input" placeholder="Leave a message" type="text">
+                                                                            </div>
+                                                                          </div>
+                                                                          <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" title="Send">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </button>
+                                                                          <hr class="MuiDivider-root makeStyles-divider-384">
+                                                                          <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Attach photo">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </button>
+                                                                          <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Attach file">
+                                                                            <span class="MuiIconButton-label">
+                                                                              <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                                <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z">
+                                                                                </path>
+                                                                              </svg>
+                                                                            </span>
+                                                                            <span class="MuiTouchRipple-root">
+                                                                            </span>
+                                                                          </button>
+                                                                          <input class="makeStyles-fileInput-385" type="file">
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </main>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <script src="Chat_fichiers/bundle.js">
+                                                            </script>
+                                                            <script src="Chat_fichiers/1.js">
+                                                            </script>
+                                                            <script src="Chat_fichiers/main.js">
+                                                            </script>
+
+                                                            <div role="presentation" style="position: fixed; z-index: 1300; inset: 0px; visibility: hidden;" aria-hidden="true">
+                                                              <div tabindex="0" data-test="sentinelStart">
+                                                              </div>
+                                                              <div class="MuiPaper-root MuiMenu-paper MuiPaper-elevation8 MuiPopover-paper MuiPaper-rounded" style="opacity: 0; transform: scale(0.75, 0.5625); visibility: hidden;" role="document" tabindex="-1">
+                                                                <ul class="MuiList-root MuiMenu-list MuiList-padding" role="menu" tabindex="-1">
+                                                                  <li class="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button" tabindex="-1" role="menuitem" aria-disabled="false">
+                                                                    <div class="MuiListItemIcon-root">
+                                                                      <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z">
+                                                                        </path>
+                                                                      </svg>
+                                                                    </div>
+                                                                    <div class="MuiListItemText-root">
+                                                                      <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">Block user</span>
+                                                                    </div>
+                                                                    <span class="MuiTouchRipple-root">
+                                                                    </span>
+                                                                  </li>
+                                                                  <li class="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button" tabindex="-1" role="menuitem" aria-disabled="false">
+                                                                    <div class="MuiListItemIcon-root">
+                                                                      <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                        <path fill="none" d="M0 0h24v24H0V0z">
+                                                                        </path>
+                                                                        <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z">
+                                                                        </path>
+                                                                      </svg>
+                                                                    </div>
+                                                                    <div class="MuiListItemText-root">
+                                                                      <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">Delete conversation</span>
+                                                                    </div>
+                                                                    <span class="MuiTouchRipple-root">
+                                                                    </span>
+                                                                  </li>
+                                                                  <li class="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button" tabindex="-1" role="menuitem" aria-disabled="false">
+                                                                    <div class="MuiListItemIcon-root">
+                                                                      <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                        <path fill="none" d="M0 0h24v24H0V0z">
+                                                                        </path>
+                                                                        <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.81.97H5.44l.8-.97zM5 19V8h14v11H5zm8.45-9h-2.9v3H8l4 4 4-4h-2.55z">
+                                                                        </path>
+                                                                      </svg>
+                                                                    </div>
+                                                                    <div class="MuiListItemText-root">
+                                                                      <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">Archive conversation</span>
+                                                                    </div>
+                                                                    <span class="MuiTouchRipple-root">
+                                                                    </span>
+                                                                  </li>
+                                                                  <li class="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button" tabindex="-1" role="menuitem" aria-disabled="false">
+                                                                    <div class="MuiListItemIcon-root">
+                                                                      <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                                                                        <path fill="none" d="M0 0h24v24H0V0z">
+                                                                        </path>
+                                                                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm0-15.5c2.49 0 4 2.02 4 4.5v.1l2 2V11c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68c-.24.06-.47.15-.69.23l1.64 1.64c.18-.02.36-.05.55-.05zM5.41 3.35L4 4.76l2.81 2.81C6.29 8.57 6 9.74 6 11v5l-2 2v1h14.24l1.74 1.74 1.41-1.41L5.41 3.35zM16 17H8v-6c0-.68.12-1.32.34-1.9L16 16.76V17z">
+                                                                        </path>
+                                                                      </svg>
+                                                                    </div>
+                                                                    <div class="MuiListItemText-root">
+                                                                      <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">Mute notifications</span>
+                                                                    </div>
+                                                                    <span class="MuiTouchRipple-root">
+                                                                    </span>
+                                                                  </li>
+                                                                </ul>
+                                                              </div>
+                                                              <div tabindex="0" data-test="sentinelEnd">
+                                                              </div>
+                                                            </div>
+                                                            <script type="text/javascript" src="Chat_fichiers/installHook.js">
+                                                            </script>
+                                                          </body>
+                                                          </html>

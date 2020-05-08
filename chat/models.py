@@ -3,7 +3,7 @@ from django.db import models
 
 class Contact(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.FileField(blank=True, null=True)
+    picture = models.ImageField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username

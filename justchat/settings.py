@@ -40,15 +40,15 @@ INSTALLED_APPS = [
     'chat',
     'channels',
     'rest_framework',
-    'rest_auth',
-    'rest_auth.registration',
-    'rest_framework.authtoken',
-    'allauth',
-    'allauth.account',
+    # 'rest_auth',
+    # 'rest_auth.registration',
+    # 'rest_framework.authtoken',
+    # 'allauth',
+    # 'allauth.account',
     'django.contrib.sites',
-    'rest_framework_swagger',
-    'rest_framework_simplejwt',
-     'corsheaders',
+    # 'rest_framework_swagger',
+    # 'rest_framework_simplejwt',
+    #'corsheaders',
 ]
 
 
@@ -56,14 +56,14 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-     'corsheaders.middleware.CorsMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'justchat.urls'
@@ -74,12 +74,12 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,14 +115,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # authentication settings
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+#     ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#          'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+# }
 
 
 

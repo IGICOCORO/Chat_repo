@@ -1,22 +1,15 @@
-from django.urls import path,include
+from django.urls import path, include
+from rest_framework import routers
+from .api import *
+from . import views
 
-
-from .views import (
-    ChatListView,
-    ChatDetailView,
-    ChatCreateView,
-    ChatUpdateView,
-    ChatDeleteView
-)
-
-app_name = 'chat'
-
+router = routers.DefaultRouter()
+router.register("contact", ContactSerializer, basename='contact')
+router.register("message", MessageSerializer, basename='contact')
 
 urlpatterns = [
-    path('chatList/', ChatListView.as_view()),
-    path('create/', ChatCreateView.as_view()),
-    path('<pk>', ChatDetailView.as_view()),
-    path('<pk>/update/', ChatUpdateView.as_view()),
-    path('<pk>/delete/', ChatDeleteView.as_view())
+    # path("api/", include(router.urls)),
+    path("", views.Home.as_view(), name='home'),
+    path("<id_user>", views.Chat.as_view(), name='chat'),
 ]
 
