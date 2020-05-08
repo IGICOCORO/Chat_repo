@@ -6,9 +6,26 @@ class ConnexionForm(forms.Form):
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Password ', 'type':'password','class':'form-control'}))
 
 class MessageForm(forms.ModelForm):
-    class Meta:
-        model = Message
-        fields = ('content','picture')
+	file = forms.FileField(
+		widget=forms.FileInput(
+			attrs={
+				'placeholder':'profile picture ',
+				'class':'form-control',
+				'style':"display: none;",
+				'id': 'file_input'
+			})
+		)
+	message = forms.CharField(
+		widget=forms.TextInput(
+			attrs={
+				'placeholder':'Leave a message',
+				'class':'MuiInputBase-input MuiInput-input',
+			}
+		)
+	)
+	class Meta:
+		model = Message
+		fields = ('content','file')
 
 class RegisterForm(forms.Form):
 	username = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Username ','class':'form-control'}), label='Username')

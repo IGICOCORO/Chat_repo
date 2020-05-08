@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="theme-color" content="#000000">
   <link href="{% static "css/style.css" %}" rel="stylesheet" />
+  <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet" />
   <title>Chat</title>
 </head>
 
@@ -55,7 +56,7 @@
                 <hr class="MuiDivider-root">
                 <ul class="MuiList-root">
                 {% for contact in contacts %}
-                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="http://localhost:3000/chat/716b42d4-8eae-11ea-8f9d-6703140a1bbd">
+                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
                     <div class="MuiListItemAvatar-root">
                       <div class="MuiAvatar-root makeStyles-avatar-203">
                         <img alt="Person" src="{% if contact.picture %}
@@ -79,13 +80,11 @@
                 </ul>
               </div>
               <div class="makeStyles-root-158 makeStyles-conversationPlaceholder-126">
-                {% block messages %}
                 <div class="makeStyles-inner-159">
                   <img alt="Select conversation" class="makeStyles-image-160" src="{% static "img/undraw_work_chat_erdt.svg" %}">
                   <h4 class="MuiTypography-root makeStyles-title-161 MuiTypography-h4">Select conversation to display</h4>
                   <h6 class="MuiTypography-root MuiTypography-subtitle1">To start a conversation just click the message button from a person profile</h6>
                 </div>
-                {% endblock messages %}
               </div>
             </div>
           </main>

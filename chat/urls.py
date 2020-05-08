@@ -10,6 +10,6 @@ router.register("message", MessageSerializer, basename='contact')
 urlpatterns = [
     # path("api/", include(router.urls)),
     path("", views.Home.as_view(), name='home'),
-    path("<id_user>", views.Chat.as_view(), name='chat'),
+    path("<int:id_user>", views.Chat.as_view(), name='chat'),
 ]
 

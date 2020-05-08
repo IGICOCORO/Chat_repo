@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from .models import *
 from .serializers import *
@@ -54,12 +55,30 @@ class Chat(View):
     template_name = 'chat.html'
     next_p = "home"
 
-    def get(self, request, *args, **kwargs):
-        form = RegisterForm()
+    def get(self, request, id_user, *args, **kwargs):
+        form = MessageForm()
+        contacts = Contact.objects.all()
+        messages = Message.objects.filter(
+            Q(
+                Q(source=id_user, destination=request.user.id) |
+                Q(source=request.user.id, destination=id_user)
+            )
+        )
         return render(request, self.template_name, locals())
 
-    def post(self, request, *args, **kwargs):
-        form = RegisterForm(request.POST, request.FILES)
+    def post(self, request, id_user, *args, **kwargs):
+        form = MessageForm(request.POST, request.FILES)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.source = request.user
+            message.destination = id_user
+            message.save()
+            messages = Message.objects.filter(
+                Q(
+                    Q(source=id_user, destination=request.user) |
+                    Q(source=request.user, destination=id_user)
+                )
+            )
         return render(request, self.template_name, locals())
 
 class Register(View):

@@ -15,7 +15,7 @@ class Message(models.Model):
     source = models.ForeignKey(Contact, related_name="source", on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    picture = models.FileField(blank=True, null=True)
+    file = models.FileField(blank=True, null=True)
     destination = models.ForeignKey(Contact, related_name="destination", on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
 
