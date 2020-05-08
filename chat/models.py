@@ -1,32 +1,23 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.db import models
 
-User = get_user_model()
-
-
 class Contact(models.Model):
-    user = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
-    friends = models.ManyToManyField('self', blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username
 
+    def fullname(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Message(models.Model):
-    contact = models.ForeignKey(
-        Contact, related_name="messages", on_delete=models.CASCADE
-    )
+    source = models.ForeignKey(Contact, related_name="source", on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    picture = models.FileField(blank=True, null=True)
+    destination = models.ForeignKey(Contact, related_name="destination", on_delete=models.CASCADE)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.contact.user.username
-
-
-class Chat(models.Model):
-    participants = models.ManyToManyField(Contact, related_name="chats", blank=True)
-    messages = models.ManyToManyField(Message, blank=True)
-
-    def __str__(self):
-        return "{}".format(self.pk)
+        return f'{self.source.user.username} - {self.destination.user.username}'
