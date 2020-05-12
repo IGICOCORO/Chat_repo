@@ -58,27 +58,31 @@ class Chat(View):
     def get(self, request, id_user, *args, **kwargs):
         form = MessageForm()
         contacts = Contact.objects.all()
-        messages = Message.objects.filter(
-            Q(
-                Q(source=id_user, destination=request.user.id) |
-                Q(source=request.user.id, destination=id_user)
-            )
-        )
+        source = Contact.objects.get(user = request.user)
+        destination = Contact.objects.get(user=id_user)
+        messages =  Message.objects.filter(
+                Q(
+                    Q(source=source, destination=destination) |
+                    Q(source=destination, destination=source)
+                )
+            ).order_by("timestamp")
         return render(request, self.template_name, locals())
 
     def post(self, request, id_user, *args, **kwargs):
         form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
-            message.source = request.user
-            message.destination = id_user
+            source = Contact.objects.get(user = request.user)
+            destination = Contact.objects.get(user=id_user)
+            message.source = source
+            message.destination = destination
             message.save()
             messages = Message.objects.filter(
                 Q(
-                    Q(source=id_user, destination=request.user) |
-                    Q(source=request.user, destination=id_user)
+                    Q(source=source, destination=destination) |
+                    Q(source=destination, destination=source)
                 )
-            )
+            ).order_by("timestamp")
         return render(request, self.template_name, locals())
 
 class Register(View):

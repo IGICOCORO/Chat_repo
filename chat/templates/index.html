@@ -55,7 +55,8 @@
                 </div>
                 <hr class="MuiDivider-root">
                 <ul class="MuiList-root">
-                {% for contact in contacts %}
+              {% for contact in contacts %}
+              {% if contact.user != user %}
                   <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
                     <div class="MuiListItemAvatar-root">
                       <div class="MuiAvatar-root makeStyles-avatar-203">
@@ -75,8 +76,9 @@
                       {% endif %}
                     </div>
                     <span class="MuiTouchRipple-root"></span>
-                  </a>               
-                {% endfor %}
+                  </a>  
+              {% endif %}             
+              {% endfor %}
                 </ul>
               </div>
               <div class="makeStyles-root-158 makeStyles-conversationPlaceholder-126">

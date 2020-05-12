@@ -1,11 +1,14 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import chat.routing
+
+from django.urls import path
+from chat.consumers import MainConsumer
 
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
-        URLRouter(
-            chat.routing.websocket_urlpatterns
+        URLRouter([
+            	path("chat/<id_user>", MainConsumer),
+            ]
         )
     ),
 })

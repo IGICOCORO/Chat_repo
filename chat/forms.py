@@ -12,14 +12,16 @@ class MessageForm(forms.ModelForm):
 				'placeholder':'profile picture ',
 				'class':'form-control',
 				'style':"display: none;",
-				'id': 'file_input'
-			})
+				'id': 'form_message_file'
+			}),
+		required=False
 		)
-	message = forms.CharField(
+	content = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'placeholder':'Leave a message',
 				'class':'MuiInputBase-input MuiInput-input',
+				'id':'form_message_text'
 			}
 		)
 	)

@@ -4,11 +4,11 @@ from .api import *
 from . import views
 
 router = routers.DefaultRouter()
-router.register("contact", ContactSerializer, basename='contact')
-router.register("message", MessageSerializer, basename='contact')
+router.register("contact", ContactViewset)
+router.register("message", MessageViewset)
 
 urlpatterns = [
-    # path("api/", include(router.urls)),
+    path("api/", include(router.urls)),
     path("", views.Home.as_view(), name='home'),
     path("<int:id_user>", views.Chat.as_view(), name='chat'),
 ]

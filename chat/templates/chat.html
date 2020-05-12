@@ -5,18 +5,16 @@
  <head> 
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
   <meta charset="utf-8" /> 
-  <link rel="shortcut icon" href="http://localhost:3000/favicon.ico" /> 
+  <link rel="shortcut icon" href="/favicon.ico" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /> 
   <meta name="theme-color" content="#000000" /> 
-  <link href="{% static "css/chat.css" %}" rel="stylesheet" />
-  <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet" />
-  <script src="{% static "js/jquery.min.js" %}" type="text/javascript" charset="utf-8" async defer></script>
+  <link href="{% static 'css/chat.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/jquery.cookie.min.js' %}" type="text/javascript"></script>
   <title>Chat</title> 
 </head> 
 <body> 
-  <noscript>
-   You need to enable JavaScript to run this app.
-  </noscript> 
   <div id="root">
    <div class="react-notification-root ">
     <div class="notification-container-top-left"></div>
@@ -32,7 +30,7 @@
    <div class="makeStyles-root-1">
     <header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionFixed makeStyles-root-6 makeStyles-topBar-2 MuiAppBar-colorPrimary mui-fixed">
      <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
-      <a href="http://localhost:3000/"><img alt="Logo" src="Chat_fichiers/logo.png" /></a>
+      <a href="/"><img alt="Logo" src="Chat_fichiers/logo.png" /></a>
       <div class="makeStyles-flexGrow-7"></div>
       <div class="makeStyles-search-8">
        <svg class="MuiSvgIcon-root makeStyles-searchIcon-9" focusable="false" viewbox="0 0 24 24" aria-hidden="true" role="presentation">
@@ -63,32 +61,35 @@
         <hr class="MuiDivider-root" />
         <ul class="MuiList-root">
         {% for contact in contacts %}
-          <a class="MuiButtonBase-root MuiListItem-root {% if contact.id == id_user %} makeStyles-active-328 {% endif %} MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
+        {% if contact.user != user %}
+          <a class="MuiButtonBase-root MuiListItem-root {% if contact.user.id == id_user %} 
+            makeStyles-active-328 {% endif %} MuiListItem-gutters MuiListItem-divider MuiListItem-button" 
+            tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.user.id %}"
+            id="contact{{contact.user.id}}">
             <div class="MuiListItemAvatar-root">
               <div class="MuiAvatar-root makeStyles-avatar-203">
-                <img alt="Person" src="{% if contact.picture %}
-                  {{ contact.picture.url }}
-                {% endif %}" class="MuiAvatar-img">
+                <img alt="Person" src="{% if contact.picture %} {{ contact.picture.url }}{% endif %}" class="MuiAvatar-img">
               </div>
             </div>
             <div class="MuiListItemText-root MuiListItemText-multiline">
-              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">{{ contact.fullname }}</span>
-              <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact|last_message:user.id }}</p>
+              <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap contact_fullname">{{ contact.fullname }}</span>
+              <p class="txt_last_msg MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact|last_message:user.id }}</p>
             </div>
             <div class="makeStyles-details-204">
-              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">{{ contact|last_message_time:user.id }}</p>
+              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact|last_message_time:user.id }}</p>
               {% if contact|unread_messages:user.id > 0 %}
                 <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">{{ contact|unread_messages:user.id }}</span>
               {% endif %}
             </div>
             <span class="MuiTouchRipple-root"></span>
-          </a>               
+          </a>
+        {% endif %}           
         {% endfor %}
         </ul>
        </div>
        <div class="makeStyles-root-353 makeStyles-conversationDetails-251">
         <div class="MuiToolbar-root MuiToolbar-regular makeStyles-root-354 MuiToolbar-gutters">
-         <a class="MuiButtonBase-root MuiIconButton-root makeStyles-backButton-355 MuiIconButton-edgeStart" tabindex="0" role="button" aria-disabled="false" title="Back" href="http://localhost:3000/chat"><span class="MuiIconButton-label">
+         <a class="MuiButtonBase-root MuiIconButton-root makeStyles-backButton-355 MuiIconButton-edgeStart" tabindex="0" role="button" aria-disabled="false" title="Back" href="/chat"><span class="MuiIconButton-label">
            <svg class="MuiSvgIcon-root" focusable="false" viewbox="0 0 24 24" aria-hidden="true" role="presentation">
             <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"></path>
            </svg></span><span class="MuiTouchRipple-root"></span></a>
@@ -113,24 +114,32 @@
         </div>
         <hr class="MuiDivider-root" />
         <div class="makeStyles-root-365">
-         <div class="scrollbar-container ps">
-          <div class="makeStyles-inner-366">
+         <div class="scrollbar-container ps bd-content">
+          <div class="makeStyles-inner-366", id="messages_boddy">
           {% for message in messages %}
-          {% if message.source.id == user.id %}
+          {% if message.source.id != user.contact.id %}
             <div class="makeStyles-root-367">
               <div class="makeStyles-inner-369">
-               <a class="MuiAvatar-root makeStyles-avatar-370" href="http://localhost:3000/profile/1/timeline"><img src="Chat_fichiers/avatar_9.png" class="MuiAvatar-img" /></a>
+               <a class="MuiAvatar-root makeStyles-avatar-370"><img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" /></a>
                <div>
                 <div class="makeStyles-body-371">
                  <div>
-                  <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit" href="http://localhost:3000/profile/1/timeline">Emilee Simchenko</a>
+                  <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit">
+                    {{ message.source.user.first_name }} {{ message.source.user.last_name }}
+                  </a>
                  </div>
                  <div class="makeStyles-content-372">
-                  <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">Hi Shen, we should submit the product today</p>
+                  <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">
+                    {% if message.file %}
+                      <b><a href="{{ message.file.url }}">file: {{ message.content }}</a></b>
+                    {% else %}
+                      {{ message.content }}
+                    {% endif %}
+                  </p>
                  </div>
                 </div>
                 <div class="makeStyles-footer-374">
-                 <p class="MuiTypography-root MuiTypography-body2">2h ago</p>
+                 <p class="MuiTypography-root MuiTypography-body2">{{ message.timestamp.hour}}:{{ message.timestamp.minute}}</p>
                 </div>
                </div>
               </div>
@@ -138,18 +147,24 @@
           {% else %}
              <div class="makeStyles-root-367 makeStyles-authUser-368">
               <div class="makeStyles-inner-369">
-               <a class="MuiAvatar-root makeStyles-avatar-370" href="http://localhost:3000/profile/1/timeline"><img src="Chat_fichiers/avatar_11.png" class="MuiAvatar-img" /></a>
+               <a class="MuiAvatar-root makeStyles-avatar-370"><img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" /></a>
                <div>
                 <div class="makeStyles-body-371">
                  <div>
-                  <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit" href="http://localhost:3000/profile/1/timeline">Me</a>
+                  <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit">Me</a>
                  </div>
                  <div class="makeStyles-content-372">
-                  <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">Oh, totally forgot about it</p>
+                  <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">
+                    {% if message.file %}
+                      <b><a href="{{ message.file.url }}">file: {{ message.content }}</a></b>
+                    {% else %}
+                      {{ message.content }}
+                    {% endif %}
+                  </p>
                  </div>
                 </div>
                 <div class="makeStyles-footer-374">
-                 <p class="MuiTypography-root MuiTypography-body2">1h ago</p>
+                 <p class="MuiTypography-root MuiTypography-body2">{{ message.timestamp.hour}}:{{ message.timestamp.minute}}</p>
                 </div>
                </div>
               </div>
@@ -165,24 +180,25 @@
           </div>
          </div>
         </div>
-    <form action="{% url 'chat' id_user %}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+    <form id="form_message" action="{% url 'chat' id_user %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
         <hr class="MuiDivider-root" />
         <div class="makeStyles-root-381"><div class="MuiAvatar-root">
-          <img alt="Person" src="Chat_fichiers/avatar_11.png" class="MuiAvatar-img" />
+          <img alt="Person" src="{% if user.contact.picture %} {{ user.contact.picture.url }}{% endif %}" class="MuiAvatar-img" id="my_avatar"/>
          </div>
          <div class="MuiPaper-root MuiPaper-elevation1 makeStyles-paper-382 MuiPaper-rounded">
           <div class="MuiInputBase-root MuiInput-root makeStyles-input-383">
-            {{ form.message }}
+            {{ form.content }}
           </div>
          </div>
-         <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="submit" title="Send"><span class="MuiIconButton-label">
+         <button id="btn_submit" class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="submit" title="Send">
+            <span class="MuiIconButton-label">
            <svg class="MuiSvgIcon-root" focusable="false" viewbox="0 0 24 24" aria-hidden="true" role="presentation">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
            </svg></span><span class="MuiTouchRipple-root"></span></button>
          <hr class="MuiDivider-root makeStyles-divider-384" />
          {{ form.file }}
-         <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Attach file" onclick="$('#file_input').click()">
+         <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Attach file" onclick="$('#form_message_file').click()">
           <span class="MuiIconButton-label">
            <svg class="MuiSvgIcon-root" focusable="false" viewbox="0 0 24 24" aria-hidden="true" role="presentation">
             <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z">
@@ -191,6 +207,8 @@
          </span><span class="MuiTouchRipple-root"></span>
          </button>
         </div>
+        <input type="hidden" id="source" name="source" value="{{ user.id }}">
+        <input type="hidden" id="destination" name="destination" value="{{ id_user }}">
     </form>
        </div>
       </div>
@@ -198,15 +216,140 @@
     </div>
    </div>
   </div> 
-  <script src="Chat_fichiers/bundle.js"></script>
-  <script src="Chat_fichiers/1.js"></script>
-  <script src="Chat_fichiers/main.js"></script> 
   <div role="presentation" style="position: fixed; z-index: 1300; inset: 0px; visibility: hidden;" aria-hidden="true">
    <div tabindex="0" data-test="sentinelStart"></div>
    <div class="MuiPaper-root MuiMenu-paper MuiPaper-elevation8 MuiPopover-paper MuiPaper-rounded" style="opacity: 0; transform: scale(0.75, 0.5625); visibility: hidden;" role="document" tabindex="-1">
    </div>
    <div tabindex="0" data-test="sentinelEnd"></div>
   </div>
-  <script type="text/javascript" src="Chat_fichiers/installHook.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+jQuery(document).ready(function($) {
+
+function templMyMsg(content, time, img){
+  time = time.split("T")[1].split('.')[0].slice(0,-3)
+  return `
+    <div class="makeStyles-root-367 makeStyles-authUser-368">
+      <div class="makeStyles-inner-369">
+       <a class="MuiAvatar-root makeStyles-avatar-370">
+       <img src="`+img+`" class="MuiAvatar-img" /></a>
+       <div>
+        <div class="makeStyles-body-371">
+         <div>
+          <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit">Me</a>
+         </div>
+         <div class="makeStyles-content-372">
+          <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">`+content+`</p>
+         </div>
+        </div>
+        <div class="makeStyles-footer-374">
+         <p class="MuiTypography-root MuiTypography-body2">`+time+`</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    `
+}
+
+function templOthersMsg(source_name, content, time, img){
+  time = time.split("T")[1].split('.')[0].slice(0,-3)
+  return `
+    <div class="makeStyles-root-367">
+      <div class="makeStyles-inner-369">
+       <a class="MuiAvatar-root makeStyles-avatar-370"><img src="`+img+`" class="MuiAvatar-img" /></a>
+       <div>
+        <div class="makeStyles-body-371">
+         <div>
+          <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit">`+source_name+`</a>
+         </div>
+         <div class="makeStyles-content-372">
+          <p class="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">`+content+`</p>
+         </div>
+        </div>
+        <div class="makeStyles-footer-374">
+         <p class="MuiTypography-root MuiTypography-body2">`+time+`</p>
+        </div>
+       </div>
+      </div>
+    </div>
+    `
+}
+
+  function scrollDown(){
+    div = $("#messages_boddy").parent(".bd-content");
+    // div.scrollTop(div.prop("scrollHeight"));
+    div.animate({ scrollTop: div.prop("scrollHeight")}, 100);
+  }
+
+  $("#form_message_file").on('change', function(event) {
+    event.preventDefault();
+    filename = $(this).val().replace(/.*(\/|\\)/, '');
+    $('#form_message_text').val(filename);
+  });
+
+  loc = window.location;
+  w_start = "ws://";
+  if(loc.protocol==="https:"){
+    w_start = "wss://";
+  }
+  ws_url = w_start+loc.host+loc.pathname;
+
+  socket = new WebSocket(ws_url);
+
+  socket.onmessage = function(e){
+    console.log("socket message", e);
+    data = JSON.parse(e.data);
+    sender_div = $("#contact"+data.source);
+    console.log(sender_div);
+    sender_pic = sender_div.find('.MuiAvatar-img').attr('src');
+    sender_name = sender_div.find('.contact_fullname').text();
+    sender_div.find('.txt_last_msg').text(data.message);
+    sender_div.find('.txt_last_msg_time').text(data.timestamp.split("T")[1].split('.')[0].slice(0,-3));
+    $("#messages_boddy").append(templOthersMsg(sender_name, data.message, data.timestamp, sender_pic));
+    scrollDown();
+
+  };
+  socket.onopen = function(e){
+    console.log("socket open", e);
+    $("#form_message").on('submit', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        $form = $(this);
+        $.ajax({
+            url: '/chat/api/message/',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            headers : {"X-CSRFToken":$.cookie("csrftoken")},
+        })
+        .done(function(data) {
+          $(".makeStyles-active-328").find('.txt_last_msg').text(data.content);
+          socket.send(
+            JSON.stringify({
+              "source":data.source,
+              "destination":data.destination,
+              "message":data.content,
+              "timestamp":data.timestamp,
+            })
+          );
+          my_avatar = $('#my_avatar').attr('src');
+          $("#messages_boddy").append(templMyMsg(data.content, data.timestamp, my_avatar));
+          $form.trigger("reset");
+          scrollDown();
+        })
+        .fail(function() {
+          console.log("failed")
+        })
+        .always(function() {
+          console.log("complete");
+        });
+    });//on submit
+  };//socket
+  scrollDown();
+});
+  </script>
  </body>
 </html>

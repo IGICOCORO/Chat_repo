@@ -20,21 +20,25 @@ class MessageViewset(viewsets.ModelViewSet):
 	queryset = Message.objects.all()
 	serializer_class = MessageSerializer
 
-	@action(methods=['GET'], detail=False, url_name="chart_mode",
-		url_path=r'modedu(?P<debut>(\d{1,4}[-]?){3})au(?P<fin>(\d{1,4}[-]?){3})', )
-	def modedetail(self, request, debut, fin):
-		fin = datetime.strptime(fin, "%Y-%m-%d")
-		debut = datetime.strptime(debut, "%Y-%m-%d")
-		data = []
-		mode = Panier.objects\
-			.filter(commande__date__lte=fin, commande__date__gte=debut)\
-			.values('recette__nom').annotate(times=Count('recette__nom'))
+	# def create(self, request, *args, **kwargs):
+	# 	print(request.POST)
+	# 	super(MessageViewset, self).create(request, *args, **kwargs)
 
-		return Response({
-			'labels': [panier['recette__nom'] for panier in mode],
-			"datasets":[
-				{'data':[panier['times'] for panier in mode]},
-			]})
+	# @action(methods=['GET'], detail=False, url_name="chart_mode",
+	# 	url_path=r'modedu(?P<debut>(\d{1,4}[-]?){3})au(?P<fin>(\d{1,4}[-]?){3})', )
+	# def modedetail(self, request, debut, fin):
+	# 	fin = datetime.strptime(fin, "%Y-%m-%d")
+	# 	debut = datetime.strptime(debut, "%Y-%m-%d")
+	# 	data = []
+	# 	mode = Panier.objects\
+	# 		.filter(commande__date__lte=fin, commande__date__gte=debut)\
+	# 		.values('recette__nom').annotate(times=Count('recette__nom'))
+
+	# 	return Response({
+	# 		'labels': [panier['recette__nom'] for panier in mode],
+	# 		"datasets":[
+	# 			{'data':[panier['times'] for panier in mode]},
+	# 		]})
 
 class ContactViewset(viewsets.ModelViewSet):
 	authentication_classes = [SessionAuthentication]
