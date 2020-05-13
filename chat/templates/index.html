@@ -14,13 +14,12 @@
 </head>
 
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
       <div class="makeStyles-root-1">
         <header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionFixed makeStyles-root-6 makeStyles-topBar-2 MuiAppBar-colorPrimary mui-fixed">
           <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
-            <a href="http://localhost:3000/">
-              <img alt="Logo" src="Chat_fichiers/logo.png">
+            <a href="/">
+              <img alt="Logo" src="{% static "img/logo.png" %}">
             </a>
               <div class="makeStyles-flexGrow-7">
             </div>
@@ -33,7 +32,15 @@
                 <input class="MuiInputBase-input MuiInput-input" placeholder="Search people &amp; places" type="text">
               </div>
             </div>
-            <div class="MuiAvatar-root MuiAvatar-colorDefault">M</div>
+            {% if user.contact.picture %}
+              <div class="MuiAvatar-root makeStyles-avatar-203">
+                <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+              </div>
+            {% else %}
+              <div class="MuiAvatar-root MuiAvatar-colorDefault">
+                {{ user_initial }}
+              </div>
+            {% endif %}
           </div>
         </header>
         <div class="makeStyles-container-3">
@@ -72,7 +79,7 @@
                     <div class="makeStyles-details-204">
                       <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">{{ contact|last_message_time:user.id }}</p>
                       {% if contact|unread_messages:user.id > 0 %}
-                        <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">{{ contact|unread_messages:user.id }}</span>
+                        <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">{{ contact.user.id|unread_messages:user.id }}</span>
                       {% endif %}
                     </div>
                     <span class="MuiTouchRipple-root"></span>

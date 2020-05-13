@@ -14,6 +14,7 @@ class Home(View):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
+            user_initial = request.user.username[0].upper()
             contacts = Contact.objects.all()
             return render(request, self.template_name, locals())
         else:
@@ -58,8 +59,12 @@ class Chat(View):
     def get(self, request, id_user, *args, **kwargs):
         form = MessageForm()
         contacts = Contact.objects.all()
+        user_initial = request.user.username[0].upper()
         source = Contact.objects.get(user = request.user)
         destination = Contact.objects.get(user=id_user)
+        Message.objects\
+            .filter(Q(source=destination, destination=source))\
+            .update(read=True)
         messages =  Message.objects.filter(
                 Q(
                     Q(source=source, destination=destination) |

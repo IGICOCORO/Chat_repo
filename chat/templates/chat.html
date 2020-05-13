@@ -30,7 +30,7 @@
    <div class="makeStyles-root-1">
     <header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionFixed makeStyles-root-6 makeStyles-topBar-2 MuiAppBar-colorPrimary mui-fixed">
      <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
-      <a href="/"><img alt="Logo" src="Chat_fichiers/logo.png" /></a>
+      <a href="/"><img alt="Logo" src="{% static "img/logo.png" %}" /></a>
       <div class="makeStyles-flexGrow-7"></div>
       <div class="makeStyles-search-8">
        <svg class="MuiSvgIcon-root makeStyles-searchIcon-9" focusable="false" viewbox="0 0 24 24" aria-hidden="true" role="presentation">
@@ -40,9 +40,15 @@
         <input class="MuiInputBase-input MuiInput-input" placeholder="Search people &amp; places" type="text" />
        </div>
       </div>
-      <div class="MuiAvatar-root MuiAvatar-colorDefault">
-       M
-      </div>
+      {% if user.contact.picture %}
+        <div class="MuiAvatar-root makeStyles-avatar-203">
+          <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+        </div>
+      {% else %}
+        <div class="MuiAvatar-root MuiAvatar-colorDefault">
+          {{ user_initial }}
+        </div>
+      {% endif %}
      </div>
     </header>
     <div class="makeStyles-container-3">
@@ -73,13 +79,12 @@
             </div>
             <div class="MuiListItemText-root MuiListItemText-multiline">
               <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap contact_fullname">{{ contact.fullname }}</span>
-              <p class="txt_last_msg MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact|last_message:user.id }}</p>
+              <p class="txt_last_msg MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact.id|last_message:user.contact.id }}</p>
             </div>
             <div class="makeStyles-details-204">
-              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact|last_message_time:user.id }}</p>
-              {% if contact|unread_messages:user.id > 0 %}
-                <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">{{ contact|unread_messages:user.id }}</span>
-              {% endif %}
+              <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact.id|last_message_time:user.contact.id }}</p>
+              
+                <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline unread_count" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255); {% if contact|unread_messages:user.id < 1 %} visibility:hidden;{% endif %}">{{ contact.user.id|unread_messages:user.id }}</span>
             </div>
             <span class="MuiTouchRipple-root"></span>
           </a>
@@ -94,7 +99,7 @@
             <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"></path>
            </svg></span><span class="MuiTouchRipple-root"></span></a>
          <div class="makeStyles-user-356">
-          <h6 class="MuiTypography-root MuiTypography-h6">Emilee Simchenko</h6>
+          <h6 class="MuiTypography-root MuiTypography-h6">{{ destination.fullname }}</h6>
           <div class="makeStyles-activity-357">
            <p class="MuiTypography-root MuiTypography-body2">Active 2m ago</p>
           </div>
@@ -120,7 +125,9 @@
           {% if message.source.id != user.contact.id %}
             <div class="makeStyles-root-367">
               <div class="makeStyles-inner-369">
-               <a class="MuiAvatar-root makeStyles-avatar-370"><img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" /></a>
+               <a class="MuiAvatar-root makeStyles-avatar-370">
+                <img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" />
+              </a>
                <div>
                 <div class="makeStyles-body-371">
                  <div>
@@ -301,12 +308,26 @@ function templOthersMsg(source_name, content, time, img){
     console.log("socket message", e);
     data = JSON.parse(e.data);
     sender_div = $("#contact"+data.source);
-    console.log(sender_div);
+
     sender_pic = sender_div.find('.MuiAvatar-img').attr('src');
     sender_name = sender_div.find('.contact_fullname').text();
+    unread_count = sender_div.find('.unread_count');
+
+    // if(sender_div.hasClass("makeStyles-active-328")){
+    //   unread_count.text(0);
+    //   unread_count.css('visibility', 'hidden');
+    // }else{
+      if(unread_count.text().trim().length < 1){
+        unread_count.text(1);
+      }else{
+        unread_count.text(parseInt(unread_count.text())+1);
+      }
+    // }
     sender_div.find('.txt_last_msg').text(data.message);
     sender_div.find('.txt_last_msg_time').text(data.timestamp.split("T")[1].split('.')[0].slice(0,-3));
-    $("#messages_boddy").append(templOthersMsg(sender_name, data.message, data.timestamp, sender_pic));
+    if(String(data.source) == String($("#destination").val())){
+      $("#messages_boddy").append(templOthersMsg(sender_name, data.message, data.timestamp, sender_pic));
+    }
     scrollDown();
 
   };
@@ -327,18 +348,23 @@ function templOthersMsg(source_name, content, time, img){
         })
         .done(function(data) {
           $(".makeStyles-active-328").find('.txt_last_msg').text(data.content);
+          message = data.content;
+          if(data.file!=null){
+            message = `<b><a href="`+data.file+`">`+data.content+`</a></b>`;
+          }
           socket.send(
             JSON.stringify({
               "source":data.source,
               "destination":data.destination,
-              "message":data.content,
+              "message":message,
               "timestamp":data.timestamp,
             })
           );
           my_avatar = $('#my_avatar').attr('src');
-          $("#messages_boddy").append(templMyMsg(data.content, data.timestamp, my_avatar));
+          $("#messages_boddy").append(templMyMsg(message, data.timestamp, my_avatar));
           $form.trigger("reset");
-          scrollDown();
+          div = $("#messages_boddy").parent(".bd-content");
+          div.scrollTop(div.prop("scrollHeight"));
         })
         .fail(function() {
           console.log("failed")
