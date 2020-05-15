@@ -67,9 +67,15 @@
                   <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
                     <div class="MuiListItemAvatar-root">
                       <div class="MuiAvatar-root makeStyles-avatar-203">
-                        <img alt="Person" src="{% if contact.picture %}
-                          {{ contact.picture.url }}
-                        {% endif %}" class="MuiAvatar-img">
+                      {% if user.contact.picture %}
+                        <div class="MuiAvatar-root makeStyles-avatar-203">
+                          <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+                        </div>
+                      {% else %}
+                        <div class="MuiAvatar-root MuiAvatar-colorDefault">
+                          {{ user_initial }}
+                        </div>
+                      {% endif %}
                       </div>
                     </div>
                     <div class="MuiListItemText-root MuiListItemText-multiline">

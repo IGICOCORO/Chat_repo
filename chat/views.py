@@ -13,6 +13,7 @@ class Home(View):
     template_name = "index.html"
 
     def get(self, request, *args, **kwargs):
+        user_initial = request.user.username[0].upper()
         if request.user.is_authenticated:
             user_initial = request.user.username[0].upper()
             contacts = Contact.objects.all()
