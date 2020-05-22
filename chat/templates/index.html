@@ -66,14 +66,12 @@
               {% if contact.user != user %}
                   <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
                     <div class="MuiListItemAvatar-root">
-                      <div class="MuiAvatar-root makeStyles-avatar-203">
-                      {% if user.contact.picture %}
-                        <div class="MuiAvatar-root makeStyles-avatar-203">
-                          <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
-                        </div>
+                      <div class="MuiAvatar-root makeStyles-avatar-203"> 
+                      {% if contact.picture %}
+                          <img alt="Person" src="{{ contact.picture.url }}" class="MuiAvatar-img">
                       {% else %}
                         <div class="MuiAvatar-root MuiAvatar-colorDefault">
-                          {{ user_initial }}
+                          {{ contact.initial }}
                         </div>
                       {% endif %}
                       </div>

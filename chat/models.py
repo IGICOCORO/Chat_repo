@@ -11,6 +11,9 @@ class Contact(models.Model):
     def fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
+    def initial(self):
+        return self.user.username[0].upper()
+
 class Message(models.Model):
     source = models.ForeignKey(Contact, related_name="source", on_delete=models.CASCADE)
     content = models.TextField()

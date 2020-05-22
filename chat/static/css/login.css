@@ -1,3 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background: #eee;
+}
+form {
+  background: #fff;
+  padding: 2em;
+  width: 30em;
+  margin: 5em auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+}
+fieldset {
+  border: none;
+  position: relative;
+  font-family: arial, sans-serif;
+}
+input {
+  width: 20em;
+  padding: 1em 1em .8em 1em;
+  width: 100%;
+  font-size: 1.2em;
+  background: white;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+input:focus {
+  outline: none;
+}
+input + label {
+  display: block;
+  cursor: text;
+  color: #777;
+  transition: .15s ease-out all;
+  position: absolute;
+  top: 1em;
+  left: 2.3em;
+}
+input:focus + label,
+label.stay {
+  top: -0.75em;
+  left: 1em;
+  font-size: 1em;
+  font-weight: bold;
+  color: #56141D;
+  background: white;
+  padding-right: 5px;
+  padding-left: 5px;
+  transition: .15s ease-out all;
+}
 .ps {
   overflow: hidden !important;
   overflow-anchor: none;
@@ -101,10 +153,7 @@
 .scrollbar-container {
   position: relative;
   height: 100%; }
- * atom-dark theme for `prism.js`
- * Based on Atom's `atom-dark` theme: https://github.com/atom/atom-dark-syntax
- * @author Joe Gibson (@gibsjose)
- */
+
 code[class*='language-'],
 pre[class*='language-'] {
   color: #c5c8c6;

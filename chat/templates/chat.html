@@ -75,13 +75,13 @@
             id="contact{{contact.user.id}}">
             <div class="MuiListItemAvatar-root">
               <div class="MuiAvatar-root makeStyles-avatar-203">
-              {% if user.contact.picture %}
+              {% if contact.picture %}
                 <div class="MuiAvatar-root makeStyles-avatar-203">
-                  <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+                  <img alt="Person" src="{{ contact.picture.url }}" class="MuiAvatar-img">
                 </div>
               {% else %}
                 <div class="MuiAvatar-root MuiAvatar-colorDefault">
-                  {{ user_initial }}
+                  {{ contact.initial }}
                 </div>
               {% endif %}
               </div>
@@ -118,7 +118,7 @@
            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
           </svg>
           <div class="MuiInputBase-root MuiInput-root makeStyles-searchInput-361">
-           <input class="MuiInputBase-input MuiInput-input" placeholder="Search email" type="text" />
+           <input class="MuiInputBase-input MuiInput-input" placeholder="Search message" type="text" id="search_email" />
           </div>
          </div>
          <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" title="More options"><span class="MuiIconButton-label">
@@ -132,11 +132,17 @@
           <div class="makeStyles-inner-366", id="messages_boddy">
           {% for message in messages %}
           {% if message.source.id != user.contact.id %}
-            <div class="makeStyles-root-367">
+            <div class="makeStyles-root-367 message_content">
               <div class="makeStyles-inner-369">
                <a class="MuiAvatar-root makeStyles-avatar-370">
-                <img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" />
-              </a>
+                {% if message.source.picture %}
+                  <img src="{{ message.source.picture.url }}" class="MuiAvatar-img" />
+                {% else %}
+                  <div class="MuiAvatar-root MuiAvatar-colorDefault">
+                    {{ message.source.initial }}
+                  </div>
+                {% endif %}
+               </a>
                <div>
                 <div class="makeStyles-body-371">
                  <div>
@@ -161,15 +167,17 @@
               </div>
             </div>
           {% else %}
-             <div class="makeStyles-root-367 makeStyles-authUser-368" id="message{{ message.id }}">
+             <div class="makeStyles-root-367 makeStyles-authUser-368 message_content" id="message{{ message.id }}">
               <div class="makeStyles-inner-369">
-               <a class="MuiAvatar-root makeStyles-avatar-370"><img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" /></a>
+               <a class="MuiAvatar-root makeStyles-avatar-370">
+                <img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" />
+              </a>
                <div>
                 <div class="makeStyles-body-371">
                  <div>
                   <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h6 MuiTypography-colorInherit">Me</a>
-                  <button class="btn btn-link float-right" onclick="deleteMessage({{ message.id }})">
-                    <i class="fas fa-trash"></i>
+                  <button class="btn btn-link float-right m-0 p-0" onclick="deleteMessage({{ message.id }})">
+                    <i class="fas fa-times text-danger"></i>
                   </button>
                  </div>
                  <div class="makeStyles-content-372">
@@ -407,6 +415,19 @@ function templOthersMsg(source_name, content, time, img){
     });//on submit
   };//socket
   scrollDown();
+
+$('#search_email').keyup(function(event) {
+  for(let label of $(".message_content")){
+    content = $(label).find(".makeStyles-content-372").text().trim();
+    if(content.includes($(this).val())){
+      $(label).css("display","flex");
+    }else{
+      $(label).css("display","none");
+    }
+  }
+});
+
+
 });
   </script>
  </body>
