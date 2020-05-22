@@ -1396,9 +1396,6 @@ label + .MuiInput-formControl {
 .makeStyles-searchInput-361 {
   flex-grow: 1;
 }
-.makeStyles-root-367 {
-  margin-bottom: 16px;
-}
 .makeStyles-authUser-368 {
   display: flex;
   justify-content: flex-end;
@@ -1416,7 +1413,7 @@ label + .MuiInput-formControl {
 }
 .makeStyles-body-371 {
   color: #263238;
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 4px;
   background-color: #f5f5f5;
 }
@@ -1431,7 +1428,6 @@ label + .MuiInput-formControl {
 }
 .makeStyles-footer-374 {
   display: flex;
-  margin-top: 8px;
   justify-content: flex-end;
 }
 .makeStyles-root-365 {

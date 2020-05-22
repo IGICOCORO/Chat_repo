@@ -32,15 +32,26 @@
                 <input class="MuiInputBase-input MuiInput-input" placeholder="Search people &amp; places" type="text">
               </div>
             </div>
-            {% if user.contact.picture %}
-              <div class="MuiAvatar-root makeStyles-avatar-203">
-                <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
-              </div>
-            {% else %}
-              <div class="MuiAvatar-root MuiAvatar-colorDefault">
-                {{ user_initial }}
-              </div>
-            {% endif %}
+            <ul class="navbar-nav ml-auto ml-md-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% if user.contact.picture %}
+                  <div class="MuiAvatar-root makeStyles-avatar-203">
+                    <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+                  </div>
+                {% else %}
+                  <div class="MuiAvatar-root MuiAvatar-colorDefault">
+                    {{ user_initial }}
+                  </div>
+                {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+                  <a class="dropdown-item  pt-0 mt-0 pb-0 mb-0" href="#">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item  pt-0 mt-0 pb-0 mb-0" href="/logout/">Logout</a>
+                </div>
+              </li>
+            </ul>
           </div>
         </header>
         <div class="makeStyles-container-3">
@@ -49,7 +60,7 @@
               <div class="makeStyles-root-127 makeStyles-conversationList-124">
                 <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
                   <div class="MuiInputBase-root MuiInput-root makeStyles-searchInput-128">
-                    <input class="MuiInputBase-input MuiInput-input" placeholder="Search contacts" type="text">
+                    <input class="MuiInputBase-input MuiInput-input" placeholder="Search contacts" type="text" id="contact-search">
                   </div>
                   <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd" tabindex="0" type="button" title="Search">
                     <span class="MuiIconButton-label">
@@ -64,7 +75,7 @@
                 <ul class="MuiList-root">
               {% for contact in contacts %}
               {% if contact.user != user %}
-                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
+                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button contact-item" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
                     <div class="MuiListItemAvatar-root">
                       <div class="MuiAvatar-root makeStyles-avatar-203"> 
                       {% if contact.picture %}
@@ -77,7 +88,7 @@
                       </div>
                     </div>
                     <div class="MuiListItemText-root MuiListItemText-multiline">
-                      <span class="MuiTypography-root MuiListItemText-primary MuiTypography-h6 MuiTypography-noWrap">{{ contact.fullname }}</span>
+                      <span class="font-weight-bold">{{ contact.fullname }}</span>
                       <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact|last_message:user.id }}</p>
                     </div>
                     <div class="makeStyles-details-204">
@@ -104,5 +115,25 @@
         </div>
       </div>
     </div>
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  <script src="{% static "js/bootstrap.bundle.min.js" %}" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+  jQuery(document).ready(function($) {
+    
+$('#contact-search').keyup(function(event) {
+  for(let label of $(".contact-item")){
+    content = $(label).find(".font-weight-bold").text().trim();
+    //to search even in lasts messages
+    //content = $(label).text().trim();
+    if(content.toLowerCase().includes($(this).val().toLowerCase())){
+      $(label).css("display","flex");
+    }else{
+      $(label).css("display","none");
+    }
+  }
+});
+
+  });
+  </script>
   </body>
 </html>
