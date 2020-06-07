@@ -46,7 +46,7 @@
           <a class="nav-link" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% if user.contact.picture %}
             <div class="MuiAvatar-root makeStyles-avatar-203">
-              <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img">
+              <img alt="Person" src="{{ user.contact.picture.url }}" class="MuiAvatar-img" id="my_avatar">
             </div>
           {% else %}
             <div class="MuiAvatar-root MuiAvatar-colorDefault">
@@ -364,7 +364,7 @@ function templOthersMsg(source_name, content, time, img){
   socket = new WebSocket(ws_url);
 
   socket.onmessage = function(e){
-    console.log("socket message", e);
+    console.log("socket new message", e);
     data = JSON.parse(e.data);
     sender_div = $("#contact"+data.source);
 
@@ -388,7 +388,6 @@ function templOthersMsg(source_name, content, time, img){
       $("#messages_boddy").append(templOthersMsg(sender_name, data.message, data.timestamp, sender_pic));
     }
     scrollDown();
-
   };
   socket.onopen = function(e){
     console.log("socket open", e);
@@ -420,6 +419,7 @@ function templOthersMsg(source_name, content, time, img){
             })
           );
           my_avatar = $('#my_avatar').attr('src');
+          console.log(my_avatar);
           $("#messages_boddy").append(templMyMsg(data.id, message, data.timestamp, my_avatar));
           $form.trigger("reset");
           div = $("#messages_boddy").parent(".bd-content");
