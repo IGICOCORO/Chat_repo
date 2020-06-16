@@ -17,17 +17,6 @@
 </head> 
 <body> 
   <div id="root">
-   <div class="react-notification-root ">
-    <div class="notification-container-top-left"></div>
-    <div class="notification-container-top-right"></div>
-    <div class="notification-container-bottom-left"></div>
-    <div class="notification-container-bottom-right"></div>
-    <div class="notification-container-top-center"></div>
-    <div class="notification-container-center">
-     <div class="center-inner"></div>
-    </div>
-    <div class="notification-container-bottom-center"></div>
-   </div>
    <div class="makeStyles-root-1">
     <header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionFixed makeStyles-root-6 makeStyles-topBar-2 MuiAppBar-colorPrimary mui-fixed">
      <div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters">
@@ -99,10 +88,10 @@
             </div>
             <div class="MuiListItemText-root MuiListItemText-multiline">
               <span class="font-weight-bold">{{ contact.fullname }}</span>
-              <p class="mb-0 txt_last_msg MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact.id|last_message:user.contact.id }}</p>
+              <p class="mb-0 txt_last_msg MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact.user.id|last_message:user.id }}</p>
             </div>
             <div class="makeStyles-details-204">
-              <p class="mb-0 MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact.id|last_message_time:user.contact.id }}</p>
+              <p class="mb-0 MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact.user.id|last_message_time:user.id }}</p>
               
                 <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline unread_count" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255); {% if contact|unread_messages:user.id < 1 %} visibility:hidden;{% endif %}">{{ contact.user.id|unread_messages:user.id }}</span>
             </div>
@@ -142,7 +131,7 @@
          <div class="scrollbar-container ps bd-content">
           <div class="makeStyles-inner-366", id="messages_boddy">
           {% for message in messages %}
-          {% if message.source.id != user.contact.id %}
+          {% if message.source.id != user.id %}
             <div class="makeStyles-root-367 mt-1 message_content">
               <div class="makeStyles-inner-369">
                <a class="MuiAvatar-root makeStyles-avatar-370">

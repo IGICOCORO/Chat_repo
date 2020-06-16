@@ -75,7 +75,7 @@
                 <ul class="MuiList-root">
               {% for contact in contacts %}
               {% if contact.user != user %}
-                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button contact-item" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.id %}">
+                  <a class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-divider MuiListItem-button contact-item" tabindex="0" role="button" aria-disabled="false" href="{% url 'chat' contact.user.id %}">
                     <div class="MuiListItemAvatar-root">
                       <div class="MuiAvatar-root makeStyles-avatar-203"> 
                       {% if contact.picture %}
