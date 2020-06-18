@@ -170,7 +170,14 @@
              <div class="makeStyles-root-367 mt-1 makeStyles-authUser-368 message_content" id="message{{ message.id }}">
               <div class="makeStyles-inner-369">
                <a class="MuiAvatar-root makeStyles-avatar-370">
-                <img src="{% if message.source.picture %} {{ message.source.picture.url }}{% endif %}" class="MuiAvatar-img" />
+
+                {% if message.source.picture %}
+                  <img src="{{ message.source.picture.url }}" class="MuiAvatar-img" />
+                {% else %}
+                  <div class="MuiAvatar-root MuiAvatar-colorDefault">
+                    {{ message.source.initial }}
+                  </div>
+                {% endif %}
               </a>
                <div>
                 <div class="makeStyles-body-371">
@@ -279,13 +286,12 @@
 
 jQuery(document).ready(function($) {
 
-function templMyMsg(id, content, time, img){
+function templMyMsg(id, content, time){
   time = time.split("T")[1].split('.')[0].slice(0,-3)
   return `
     <div class="makeStyles-root-367 mt-1 makeStyles-authUser-368" id="message`+id+`">
       <div class="makeStyles-inner-369">
-       <a class="MuiAvatar-root makeStyles-avatar-370">
-       <img src="`+img+`" class="MuiAvatar-img" /></a>
+       <a class="MuiAvatar-root makeStyles-avatar-370">`+$("#userDropdown").html()+`</a>
        <div>
         <div class="makeStyles-body-371">
          <div>
@@ -307,12 +313,13 @@ function templMyMsg(id, content, time, img){
     `
 }
 
-function templOthersMsg(source_name, content, time, img){
+function templOthersMsg(source_name, sender_div, content, time){
+  div_img = sender_div.find('.MuiListItemAvatar-root').html();
   time = time.split("T")[1].split('.')[0].slice(0,-3)
   return `
     <div class="makeStyles-root-367 mt-1">
       <div class="makeStyles-inner-369">
-       <a class="MuiAvatar-root makeStyles-avatar-370"><img src="`+img+`" class="MuiAvatar-img" /></a>
+       <a class="MuiAvatar-root makeStyles-avatar-370">`+div_img+`</a>
        <div>
         <div class="makeStyles-body-371">
          <div>
@@ -374,7 +381,7 @@ function templOthersMsg(source_name, content, time, img){
     sender_div.find('.txt_last_msg').text(data.message);
     sender_div.find('.txt_last_msg_time').text(data.timestamp.split("T")[1].split('.')[0].slice(0,-3));
     if(String(data.source) == String($("#destination").val())){
-      $("#messages_boddy").append(templOthersMsg(sender_name, data.message, data.timestamp, sender_pic));
+      $("#messages_boddy").append(templOthersMsg(sender_name, sender_div, data.message, data.timestamp));
     }
     scrollDown();
   };
@@ -409,7 +416,7 @@ function templOthersMsg(source_name, content, time, img){
           );
           my_avatar = $('#my_avatar').attr('src');
           console.log(my_avatar);
-          $("#messages_boddy").append(templMyMsg(data.id, message, data.timestamp, my_avatar));
+          $("#messages_boddy").append(templMyMsg(data.id, message, data.timestamp));
           $form.trigger("reset");
           div = $("#messages_boddy").parent(".bd-content");
           div.scrollTop(div.prop("scrollHeight"));
