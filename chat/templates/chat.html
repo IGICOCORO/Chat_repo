@@ -93,7 +93,7 @@
             <div class="makeStyles-details-204">
               <p class="mb-0 MuiTypography-root MuiTypography-body2 MuiTypography-noWrap txt_last_msg_time">{{ contact.user.id|last_message_time:user.id }}</p>
               
-                <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline unread_count" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255); {% if contact|unread_messages:user.id < 1 %} visibility:hidden;{% endif %}">{{ contact.user.id|unread_messages:user.id }}</span>
+                <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline unread_count" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255); {% if contact.user.id|unread_messages:user.id < 1 %} visibility:hidden;{% endif %}">{{ contact.user.id|unread_messages:user.id }}</span>
             </div>
             <span class="MuiTouchRipple-root"></span>
           </a>
@@ -139,7 +139,7 @@
                   <img src="{{ message.source.picture.url }}" class="MuiAvatar-img" />
                 {% else %}
                   <div class="MuiAvatar-root MuiAvatar-colorDefault">
-                    {{ message.source.initial }}
+                    {{ message.source.contact.initial }}
                   </div>
                 {% endif %}
                </a>
@@ -175,7 +175,7 @@
                   <img src="{{ message.source.picture.url }}" class="MuiAvatar-img" />
                 {% else %}
                   <div class="MuiAvatar-root MuiAvatar-colorDefault">
-                    {{ message.source.initial }}
+                    {{ message.source.contact.initial }}
                   </div>
                 {% endif %}
               </a>

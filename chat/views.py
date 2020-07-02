@@ -60,8 +60,8 @@ class Chat(View):
         form = MessageForm()
         contacts = Contact.objects.all()
         user_initial = request.user.username[0].upper()
-        source = Contact.objects.get(user = request.user)
-        destination = Contact.objects.get(user=id_user)
+        source = request.user
+        destination = User.objects.get(id=id_user)
         Message.objects\
             .filter(Q(source=destination, destination=source))\
             .update(read=True)
@@ -77,8 +77,8 @@ class Chat(View):
         form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
-            source = Contact.objects.get(user = request.user)
-            destination = Contact.objects.get(user=id_user)
+            source = request.user
+            destination = User.objects.get(id=id_user)
             message.source = source
             message.destination = destination
             message.save()

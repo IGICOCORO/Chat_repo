@@ -15,11 +15,11 @@ class Contact(models.Model):
         return self.user.username[0].upper()
 
 class Message(models.Model):
-    source = models.ForeignKey(Contact, related_name="source", on_delete=models.CASCADE)
+    source = models.ForeignKey(User, related_name="source", on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(blank=True, auto_now_add=True)
     file = models.FileField(blank=True, null=True)
-    destination = models.ForeignKey(Contact, related_name="destination", on_delete=models.CASCADE)
+    destination = models.ForeignKey(User, related_name="destination", on_delete=models.CASCADE)
     read = models.BooleanField(blank=True, default=False)
 
     def __str__(self):

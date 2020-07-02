@@ -13,7 +13,7 @@ def last_message(user1, user2):
 		)
 	).last()
 
-	return "" if not message else f"{message.source.user.first_name}:{message.content}"
+	return "" if not message else f"{message.source.first_name}:{message.content}"
 
 @register.filter
 def last_message_time(user1, user2):

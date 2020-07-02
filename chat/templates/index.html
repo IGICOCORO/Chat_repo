@@ -89,11 +89,11 @@
                     </div>
                     <div class="MuiListItemText-root MuiListItemText-multiline">
                       <span class="font-weight-bold">{{ contact.fullname }}</span>
-                      <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact|last_message:user.id }}</p>
+                      <p class="MuiTypography-root MuiListItemText-secondary MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap">{{ contact.user.id|last_message:user.id }}</p>
                     </div>
                     <div class="makeStyles-details-204">
-                      <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">{{ contact|last_message_time:user.id }}</p>
-                      {% if contact|unread_messages:user.id > 0 %}
+                      <p class="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap">{{ contact.user.id|last_message_time:user.id }}</p>
+                      {% if contact.user.id|unread_messages:user.id > 0 %}
                         <span class="MuiTypography-root makeStyles-root-225 makeStyles-rounded-226 makeStyles-unread-205 MuiTypography-overline" style="background-color: rgb(244, 67, 54); color: rgb(255, 255, 255);">{{ contact.user.id|unread_messages:user.id }}</span>
                       {% endif %}
                     </div>
