@@ -25,18 +25,28 @@ class MainConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
+        message = json.loads(text_data)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'chat_message',
+                'type': message["type"],
                 'message': text_data
             }
         )
 
     def chat_message(self, event):
         message = json.loads(event['message'])
-        print(message)
         if(str(self.scope["user"].id) == str(message['destination'])):
-            # contact = Contact.objects.get(user=message['destination'])
-            # message["source_name"] = contact.user.first_name+" "+contact.user.last_name
             self.send(text_data=json.dumps(message))
+
+    def deletion(self, event):
+        message_dict = json.loads(event['message'])
+        message_id = message_dict["message"]
+        message = Message.objects.get(id=message_id)
+        message_dict["source"] = message.source.id
+        message_dict["destination"] = message.destination.id
+        message.delete()
+
+        print(f"user = {str(self.scope['user'].id)}\nsource = {message_dict['source']}\ndestionation{message_dict['destination']}")
+        if(str(self.scope["user"].id) in (str(message.source.id), str(message.destination.id))):
+            self.send(text_data=json.dumps(message_dict))
