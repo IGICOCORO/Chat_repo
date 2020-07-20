@@ -42,11 +42,12 @@ class MainConsumer(WebsocketConsumer):
     def deletion(self, event):
         message_dict = json.loads(event['message'])
         message_id = message_dict["message"]
-        message = Message.objects.get(id=message_id)
-        message_dict["source"] = message.source.id
-        message_dict["destination"] = message.destination.id
-        message.delete()
-
-        print(f"user = {str(self.scope['user'].id)}\nsource = {message_dict['source']}\ndestionation{message_dict['destination']}")
-        if(str(self.scope["user"].id) in (str(message.source.id), str(message.destination.id))):
-            self.send(text_data=json.dumps(message_dict))
+        try:
+            message = Message.objects.get(id=message_id)
+            
+            if(str(self.scope["user"].id) in (str(message.source.id), str(message.destination.id))):
+                message.delete()
+        except:
+            print("deletion failed")
+        
+        self.send(text_data=json.dumps(message_dict))

@@ -1,46 +1,46 @@
-function deleteMessage(id){
-	$.ajax({
-		url: '/chat/api/message/'+id+'/',
-		type: 'DELETE',
-		headers : {"X-CSRFToken":$.cookie("csrftoken")}
-	})
-	.done(function() {
-		$("#message"+id).remove(); 
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});   
-}
+// function deleteMessage(id){
+// 	$.ajax({
+// 		url: '/chat/api/message/'+id+'/',
+// 		type: 'DELETE',
+// 		headers : {"X-CSRFToken":$.cookie("csrftoken")}
+// 	})
+// 	.done(function() {
+// 		$("#message"+id).remove(); 
+// 	})
+// 	.fail(function() {
+// 		console.log("error");
+// 	})
+// 	.always(function() {
+// 		console.log("complete");
+// 	});   
+// }
 
 jQuery(document).ready(function($) {
 
 	function templMyMsg(id, content, time){
 		time = time.split("T")[1].split('.')[0].slice(0,-3)
 		return `
-<div class="makeStyles-root-367 mt-1 makeStyles-authUser-368" id="message${id}">
+<div class="makeStyles-root-367 mt-1 makeStyles-authUser-368 message_content" id="message${id}">
 	<div class="makeStyles-inner-369">
 		<a class="MuiAvatar-root makeStyles-avatar-370">${$("#userDropdown").html()}</a>
 		<div>
 			<div class="makeStyles-body-371">
 				<div>
 					<a class="font-weight-bold small">Me</a>
-					<button class="btn btn-link float-right deleteMessage"
+					<button class="m-0 p-0 btn btn-link float-right deleteMessage"
 						data-id="${id}">
 						<i class="fas fa-times text-danger" style="float: right;"></i>
 					</button>
 				</div>
-				<div
-				<p class="mb-0 MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">${content}</p>
+				<div>
+					<p class="mb-0 MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit">${content}</p>
+				</div>
+			</div>
+			<div class="makeStyles-footer-374">
+				<p class="m-0 p-0 MuiTypography-root MuiTypography-body2">${time}</p>
 			</div>
 		</div>
-		<div class="makeStyles-footer-374">
-			<p class="mb-0 MuiTypography-root MuiTypography-body2">${time}</p>
-		</div>
 	</div>
-</div>
 </div>
 		`
 	}
@@ -199,6 +199,9 @@ $('#contact-search').keyup(function(event) {
 			$(label).css("display","none");
 		}
 	}
+});
+socket.on('disconnect', function(reason) {
+  console.log(`Socket disconnected for: ${reason}`);
 });
 
 });

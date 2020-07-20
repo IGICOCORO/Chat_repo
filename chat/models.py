@@ -23,4 +23,4 @@ class Message(models.Model):
     read = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return f'{self.content} : {self.source.user.username} - {self.destination.user.username}'
+        return f'{self.content} : {self.source.username} - {self.destination.username}'
